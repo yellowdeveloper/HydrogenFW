@@ -1,0 +1,56 @@
+// To get started, press Ctrl+Space to bring up the completion menu and view the available nodes.
+
+// You can also use the buttons in the sidebar to perform actions on nodes.
+// Actions currently available include:
+
+// * Enabling / disabling the node
+// * Adding the bus to a bus
+// * Removing the node
+// * Connecting ADC channels
+
+// For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
+// You can also visit the nRF DeviceTree extension documentation at https://docs.nordicsemi.com/bundle/nrf-connect-vscode/page/guides/ncs_configure_app.html#devicetree-support-in-the-extension
+
+&led0 {
+    gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+};
+&led1 {
+    status = "disabled";
+};
+&led2 {
+    status = "disabled";
+};
+&led3 {
+    status = "disabled";
+};
+
+&button0 {
+    status = "disabled";
+};
+&button1 {
+    status = "disabled";
+};
+&button2 {
+    status = "disabled";
+};
+&button3 {
+    status = "disabled";
+};
+
+&pwm0 {
+    status = "disabled";
+};
+
+&reg1 {
+	regulator-initial-mode = <NRF5X_REG_MODE_LDO>;
+};
+//&flash0 {
+//    /delete-node/ &boot_partition;
+//    /delete-node/ &slot0_partition;
+//    /delete-node/ &slot1_partition;
+
+//    slot0_partition: partition@0 {
+//        label = "image-1"; /* 또는 "code_partition" */
+//        reg = <0x00000000 0x000f8000>;
+//    };
+//};

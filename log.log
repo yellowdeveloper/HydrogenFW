@@ -1,0 +1,450 @@
+[2025-Oct-27 15:32:41] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 15:32:41] [debug] C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.exe --recover --log 
+[2025-Oct-27 15:32:41] [debug] nrfjprog version 10.24.2 external
+[2025-Oct-27 15:32:41] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 15:32:41] [ info] Load library at C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.dll.
+[2025-Oct-27 15:32:41] [ info] Library loaded, loading member functions.
+[2025-Oct-27 15:32:41] [ info] Member functions succesfully loaded.
+[2025-Oct-27 15:32:41] [debug] [ Client] - open
+[2025-Oct-27 15:32:41] [debug] [ Client] - start
+[2025-Oct-27 15:32:41] [ info] [ Client] - stdout: Jlinkarm nRF Worker ready. Handling sequence 8d99677c-c1e1-4e4f-9f74-ab29d0828993.
+[2025-Oct-27 15:32:41] [trace] [ Client] - Command open executed for 28 milliseconds with result 0
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - Logger sink registered in Segger backend logger
+[2025-Oct-27 15:32:41] [debug] [ Client] - config
+[2025-Oct-27 15:32:41] [debug] [  JLink] - Logger sink registered in JLink logger
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - open
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - just_check_family
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - open_dll
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - No J-Link DLL path was provided. Attempting to auto detect.
+[2025-Oct-27 15:32:41] [ info] [SeggerBackend] - Load library at C:\Program Files\SEGGER\JLink\JLink_x64.dll.
+[2025-Oct-27 15:32:41] [ info] [SeggerBackend] - Library loaded, loading member functions.
+[2025-Oct-27 15:32:41] [ info] [SeggerBackend] - Member functions succesfully loaded.
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - Set batch mode
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - dll_version
+[2025-Oct-27 15:32:41] [ info] [SeggerBackend] - Segger dll version 8.80.  loaded.
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Command open executed for 2 milliseconds with result 0
+[2025-Oct-27 15:32:41] [trace] [ Client] - Command config executed for 15 milliseconds with result 0
+[2025-Oct-27 15:32:41] [debug] [ Client] - enum_emu_snr
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - config
+[2025-Oct-27 15:32:41] [trace] [ Client] - Command enum_emu_con_info executed for 14 milliseconds with result 0
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - enum_emu_snr
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Command config executed for 2 milliseconds with result 0
+[2025-Oct-27 15:32:41] [debug] [ Client] - connect_to_emu_with_snr
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - enum_emu_con_info
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - enum_emu_con_info
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Command enum_emu_con_info executed for 2 milliseconds with result 0
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - connect_to_emu_with_snr
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - connect_to_emu_with_snr
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - ---just_enum_emu_snr
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - ---just_get_num_emus
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - ---just_connect_to_emu_with_snr
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - ---just_connect_to_emu_without_snr
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - Segger logging enabled.
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Hardware: V8.00
+[2025-Oct-27 15:32:41] [trace] [  JLink] - S/N: 4294967295
+[2025-Oct-27 15:32:41] [trace] [  JLink] - OEM: SEGGER
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Feature(s): RDI,FlashDL,FlashBP,JFlash,GDB
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Bootloader: (FW returned invalid version)
+[2025-Oct-27 15:32:41] [trace] [  JLink] - TELNET listener socket opened on port 19021
+[2025-Oct-27 15:32:41] [trace] [  JLink] - WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+[2025-Oct-27 15:32:41] [trace] [  JLink] - WEBSRV Webserver running on local port 19080
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Looking for J-Link GUI Server exe at: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe 
+[2025-Oct-27 15:32:41] [trace] [  JLink] - Forking J-Link GUI Server: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe 
+[2025-Oct-27 15:32:41] [trace] [  JLink] - J-Link GUI Server info: "J-Link GUI server V8.80 " 
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 19.198ms returns "O.K."  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_Lock()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_ExecCommand("SetRestartOnClose = 0", ...).   
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.001ms returns 0x01  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_ExecCommand("DisableFlashDL", ...).   
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.001ms returns 0x00  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_ExecCommand("ExcludeFlashCacheRange 0x0-0xFFFFFFFF", ...).   
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.001ms returns 0x00  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_SetHookUnsecureDialog  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_SetHookUnsecureDialog(...)
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.008ms returns 0  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_TIF_Select(JLINKARM_TIF_SWD)  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.552ms returns 0x00  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSpeedInfo()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - 4000000 Hz / n, n >= 1
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.009ms   
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - Connected emulator supports SWD speeds up to 4000kHz
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_SetSpeed(2000)  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.068ms   
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSpeed()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns 2000  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - SWD clock set to 2000kHz
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:32:41] [trace] [  JLink] - - 0.016ms   
+[2025-Oct-27 15:32:41] [trace] [  JLink] - JLINK_Close()  
+[2025-Oct-27 15:32:41] [error] [ Client] - Encountered error -102: Command connect_to_emu_with_snr executed for 63 milliseconds with result -102
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [error] [ Worker] - An unknown error.
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Command connect_to_emu_with_snr executed for 50 milliseconds with result -102
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - close
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - close
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - disconnect_from_emu
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:32:41] [debug] [SeggerBackend] - Segger Backend closed.
+[2025-Oct-27 15:32:41] [debug] [  nRFXX] - nRF family DLL closed
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Command close executed for 30 milliseconds with result 0
+[2025-Oct-27 15:32:41] [trace] [ Client] - Command close executed for 46 milliseconds with result 0
+[2025-Oct-27 15:32:41] [debug] [ Client] - terminate
+[2025-Oct-27 15:32:41] [trace] [ Client] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 15:32:41] [trace] [ Worker] - Executed 6 commands for 86 milliseconds
+[2025-Oct-27 15:32:41] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 15:32:41] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 15:32:41] [debug] [ Client] - Child process terminated with result 0
+[2025-Oct-27 15:32:41] [trace] [ Client] - Executed 6 commands for 166 milliseconds
+[2025-Oct-27 15:32:41] [debug] [ Client] - terminate
+[2025-Oct-27 15:39:13] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 15:39:13] [debug] C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.exe --log 
+[2025-Oct-27 15:39:13] [debug] nrfjprog version 10.24.2 external
+[2025-Oct-27 15:39:13] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 15:39:13] [ info] Load library at C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.dll.
+[2025-Oct-27 15:39:13] [ info] Library loaded, loading member functions.
+[2025-Oct-27 15:39:13] [ info] Member functions succesfully loaded.
+[2025-Oct-27 15:39:13] [debug] [ Client] - open
+[2025-Oct-27 15:39:13] [debug] [ Client] - start
+[2025-Oct-27 15:39:13] [ info] [ Client] - stdout: Jlinkarm nRF Worker ready. Handling sequence d501a1a7-abae-401c-a69d-7af6ece44740.
+[2025-Oct-27 15:39:13] [trace] [ Client] - Command open executed for 29 milliseconds with result 0
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - Logger sink registered in Segger backend logger
+[2025-Oct-27 15:39:13] [debug] [ Client] - config
+[2025-Oct-27 15:39:13] [debug] [  JLink] - Logger sink registered in JLink logger
+[2025-Oct-27 15:39:13] [debug] [  nRFXX] - open
+[2025-Oct-27 15:39:13] [debug] [  nRFXX] - just_check_family
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - open_dll
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - No J-Link DLL path was provided. Attempting to auto detect.
+[2025-Oct-27 15:39:13] [ info] [SeggerBackend] - Load library at C:\Program Files\SEGGER\JLink\JLink_x64.dll.
+[2025-Oct-27 15:39:13] [ info] [SeggerBackend] - Library loaded, loading member functions.
+[2025-Oct-27 15:39:13] [ info] [SeggerBackend] - Member functions succesfully loaded.
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - Set batch mode
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - dll_version
+[2025-Oct-27 15:39:13] [ info] [SeggerBackend] - Segger dll version 8.80.  loaded.
+[2025-Oct-27 15:39:13] [trace] [ Worker] - Command open executed for 2 milliseconds with result 0
+[2025-Oct-27 15:39:13] [trace] [ Client] - Command config executed for 15 milliseconds with result 0
+[2025-Oct-27 15:39:13] [debug] [ Client] - enum_emu_snr
+[2025-Oct-27 15:39:13] [debug] [  nRFXX] - config
+[2025-Oct-27 15:39:13] [trace] [ Client] - Command enum_emu_con_info executed for 15 milliseconds with result 0
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - enum_emu_snr
+[2025-Oct-27 15:39:13] [trace] [ Worker] - Command config executed for 2 milliseconds with result 0
+[2025-Oct-27 15:39:13] [debug] [  nRFXX] - enum_emu_con_info
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - enum_emu_con_info
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:13] [trace] [ Worker] - Command enum_emu_con_info executed for 2 milliseconds with result 0
+[2025-Oct-27 15:39:13] [debug] [  nRFXX] - close
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - close
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - disconnect_from_emu
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:13] [debug] [SeggerBackend] - Segger Backend closed.
+[2025-Oct-27 15:39:13] [debug] [  nRFXX] - nRF family DLL closed
+[2025-Oct-27 15:39:13] [trace] [ Client] - Command close executed for 62 milliseconds with result 0
+[2025-Oct-27 15:39:13] [debug] [ Client] - terminate
+[2025-Oct-27 15:39:13] [trace] [ Worker] - Command close executed for 46 milliseconds with result 0
+[2025-Oct-27 15:39:13] [trace] [ Client] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 15:39:13] [trace] [ Worker] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 15:39:13] [trace] [ Worker] - Executed 5 commands for 52 milliseconds
+[2025-Oct-27 15:39:13] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 15:39:13] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 15:39:13] [debug] [ Client] - Child process terminated with result 0
+[2025-Oct-27 15:39:13] [trace] [ Client] - Executed 5 commands for 121 milliseconds
+[2025-Oct-27 15:39:13] [debug] [ Client] - terminate
+[2025-Oct-27 15:39:24] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 15:39:24] [debug] C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.exe --recover --log 
+[2025-Oct-27 15:39:24] [debug] nrfjprog version 10.24.2 external
+[2025-Oct-27 15:39:24] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 15:39:24] [ info] Load library at C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.dll.
+[2025-Oct-27 15:39:24] [ info] Library loaded, loading member functions.
+[2025-Oct-27 15:39:24] [ info] Member functions succesfully loaded.
+[2025-Oct-27 15:39:24] [debug] [ Client] - open
+[2025-Oct-27 15:39:24] [debug] [ Client] - start
+[2025-Oct-27 15:39:24] [ info] [ Client] - stdout: Jlinkarm nRF Worker ready. Handling sequence ddeedc57-168d-49fa-adb8-d36d7d888c82.
+[2025-Oct-27 15:39:24] [trace] [ Client] - Command open executed for 35 milliseconds with result 0
+[2025-Oct-27 15:39:24] [debug] [ Client] - config
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - Logger sink registered in Segger backend logger
+[2025-Oct-27 15:39:24] [debug] [  JLink] - Logger sink registered in JLink logger
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - open
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - just_check_family
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - open_dll
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - No J-Link DLL path was provided. Attempting to auto detect.
+[2025-Oct-27 15:39:24] [ info] [SeggerBackend] - Load library at C:\Program Files\SEGGER\JLink\JLink_x64.dll.
+[2025-Oct-27 15:39:24] [ info] [SeggerBackend] - Library loaded, loading member functions.
+[2025-Oct-27 15:39:24] [ info] [SeggerBackend] - Member functions succesfully loaded.
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - Set batch mode
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - dll_version
+[2025-Oct-27 15:39:24] [ info] [SeggerBackend] - Segger dll version 8.80.  loaded.
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Command open executed for 2 milliseconds with result 0
+[2025-Oct-27 15:39:24] [trace] [ Client] - Command config executed for 15 milliseconds with result 0
+[2025-Oct-27 15:39:24] [debug] [ Client] - enum_emu_snr
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - config
+[2025-Oct-27 15:39:24] [trace] [ Client] - Command enum_emu_con_info executed for 15 milliseconds with result 0
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - enum_emu_snr
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Command config executed for 2 milliseconds with result 0
+[2025-Oct-27 15:39:24] [debug] [ Client] - connect_to_emu_with_snr
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - enum_emu_con_info
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - enum_emu_con_info
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Command enum_emu_con_info executed for 2 milliseconds with result 0
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - connect_to_emu_with_snr
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - connect_to_emu_with_snr
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - ---just_enum_emu_snr
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - ---just_get_num_emus
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - ---just_connect_to_emu_with_snr
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - ---just_connect_to_emu_without_snr
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - Segger logging enabled.
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Hardware: V8.00
+[2025-Oct-27 15:39:24] [trace] [  JLink] - S/N: 4294967295
+[2025-Oct-27 15:39:24] [trace] [  JLink] - OEM: SEGGER
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Feature(s): RDI,FlashDL,FlashBP,JFlash,GDB
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Bootloader: (FW returned invalid version)
+[2025-Oct-27 15:39:24] [trace] [  JLink] - TELNET listener socket opened on port 19021
+[2025-Oct-27 15:39:24] [trace] [  JLink] - WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+[2025-Oct-27 15:39:24] [trace] [  JLink] - WEBSRV Webserver running on local port 19080
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Looking for J-Link GUI Server exe at: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe 
+[2025-Oct-27 15:39:24] [trace] [  JLink] - Forking J-Link GUI Server: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe 
+[2025-Oct-27 15:39:24] [trace] [  JLink] - J-Link GUI Server info: "J-Link GUI server V8.80 " 
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 19.051ms returns "O.K."  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_Lock()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_ExecCommand("SetRestartOnClose = 0", ...).   
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.001ms returns 0x01  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_ExecCommand("DisableFlashDL", ...).   
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.001ms returns 0x00  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_ExecCommand("ExcludeFlashCacheRange 0x0-0xFFFFFFFF", ...).   
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.004ms returns 0x00  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_SetHookUnsecureDialog  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_SetHookUnsecureDialog(...)
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.008ms returns 0  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_TIF_Select(JLINKARM_TIF_SWD)  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.532ms returns 0x00  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSpeedInfo()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - 4000000 Hz / n, n >= 1
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.009ms   
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [error] [ Client] - Encountered error -102: Command connect_to_emu_with_snr executed for 63 milliseconds with result -102
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - Connected emulator supports SWD speeds up to 4000kHz
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_SetSpeed(2000)  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.087ms   
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSpeed()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.003ms returns 2000  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - SWD clock set to 2000kHz
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.004ms returns -1  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.003ms returns -1  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.001ms returns -1  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.001ms returns -1  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.001ms returns -1  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 15:39:24] [trace] [  JLink] - - 0.017ms   
+[2025-Oct-27 15:39:24] [trace] [  JLink] - JLINK_Close()  
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [error] [ Worker] - An unknown error.
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Command connect_to_emu_with_snr executed for 48 milliseconds with result -102
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - close
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - close
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - disconnect_from_emu
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 15:39:24] [debug] [SeggerBackend] - Segger Backend closed.
+[2025-Oct-27 15:39:24] [debug] [  nRFXX] - nRF family DLL closed
+[2025-Oct-27 15:39:24] [trace] [ Client] - Command close executed for 31 milliseconds with result 0
+[2025-Oct-27 15:39:24] [debug] [ Client] - terminate
+[2025-Oct-27 15:39:24] [trace] [ Client] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Command close executed for 30 milliseconds with result 0
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 15:39:24] [trace] [ Worker] - Executed 6 commands for 84 milliseconds
+[2025-Oct-27 15:39:24] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 15:39:24] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 15:39:24] [debug] [ Client] - Child process terminated with result 0
+[2025-Oct-27 15:39:24] [trace] [ Client] - Executed 6 commands for 159 milliseconds
+[2025-Oct-27 15:39:24] [debug] [ Client] - terminate
+[2025-Oct-27 17:35:12] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 17:35:12] [debug] C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.exe -f NRF52 -r --log 
+[2025-Oct-27 17:35:12] [debug] nrfjprog version 10.24.2 external
+[2025-Oct-27 17:35:12] [debug] --------------------------------------------------------------------------------
+[2025-Oct-27 17:35:12] [ info] Load library at C:\Program Files\Nordic Semiconductor\nrf-command-line-tools\bin\nrfjprog.dll.
+[2025-Oct-27 17:35:12] [ info] Library loaded, loading member functions.
+[2025-Oct-27 17:35:12] [ info] Member functions succesfully loaded.
+[2025-Oct-27 17:35:12] [debug] [ Client] - open
+[2025-Oct-27 17:35:12] [debug] [ Client] - start
+[2025-Oct-27 17:35:12] [ info] [ Client] - stdout: Jlinkarm nRF Worker ready. Handling sequence e4690af6-9f64-47ef-9342-801d0da65d8d.
+[2025-Oct-27 17:35:12] [trace] [ Client] - Command open executed for 28 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [ Client] - config
+[2025-Oct-27 17:35:12] [trace] [ Client] - Command config executed for 14 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [ Client] - enum_emu_snr
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - Logger sink registered in Segger backend logger
+[2025-Oct-27 17:35:12] [debug] [  JLink] - Logger sink registered in JLink logger
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - open
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - just_check_family
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - open_dll
+[2025-Oct-27 17:35:12] [trace] [ Client] - Command enum_emu_con_info executed for 14 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - No J-Link DLL path was provided. Attempting to auto detect.
+[2025-Oct-27 17:35:12] [ info] [SeggerBackend] - Load library at C:\Program Files\SEGGER\JLink\JLink_x64.dll.
+[2025-Oct-27 17:35:12] [debug] [ Client] - connect_to_emu_with_snr
+[2025-Oct-27 17:35:12] [ info] [SeggerBackend] - Library loaded, loading member functions.
+[2025-Oct-27 17:35:12] [ info] [SeggerBackend] - Member functions succesfully loaded.
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - Set batch mode
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - dll_version
+[2025-Oct-27 17:35:12] [ info] [SeggerBackend] - Segger dll version 8.80.  loaded.
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Command open executed for 2 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - config
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - enum_emu_snr
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Command config executed for 2 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - enum_emu_con_info
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - enum_emu_con_info
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Command enum_emu_con_info executed for 2 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - connect_to_emu_with_snr
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - connect_to_emu_with_snr
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - ---just_enum_emu_snr
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - ---just_get_num_emus
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - ---just_connect_to_emu_with_snr
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - ---just_connect_to_emu_without_snr
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - Segger logging enabled.
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Hardware: V8.00
+[2025-Oct-27 17:35:12] [trace] [  JLink] - S/N: 4294967295
+[2025-Oct-27 17:35:12] [trace] [  JLink] - OEM: SEGGER
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Feature(s): RDI,FlashDL,FlashBP,JFlash,GDB
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Bootloader: (FW returned invalid version)
+[2025-Oct-27 17:35:12] [trace] [  JLink] - TELNET listener socket opened on port 19021
+[2025-Oct-27 17:35:12] [trace] [  JLink] - WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+[2025-Oct-27 17:35:12] [trace] [  JLink] - WEBSRV Webserver running on local port 19080
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Looking for J-Link GUI Server exe at: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe 
+[2025-Oct-27 17:35:12] [trace] [  JLink] - Forking J-Link GUI Server: C:\Program Files\SEGGER\JLink\JLinkGUIServer.exe 
+[2025-Oct-27 17:35:12] [trace] [  JLink] - J-Link GUI Server info: "J-Link GUI server V8.80 " 
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 23.105ms returns "O.K."  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_Lock()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_ExecCommand("SetRestartOnClose = 0", ...).   
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.001ms returns 0x01  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_ExecCommand("DisableFlashDL", ...).   
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.001ms returns 0x00  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_ExecCommand("ExcludeFlashCacheRange 0x0-0xFFFFFFFF", ...).   
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.001ms returns 0x00  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_SetHookUnsecureDialog  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_SetHookUnsecureDialog(...)
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.006ms returns 0  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_TIF_Select(JLINKARM_TIF_SWD)  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.504ms returns 0x00  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSpeedInfo()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - 4000000 Hz / n, n >= 1
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.005ms   
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - Connected emulator supports SWD speeds up to 4000kHz
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_SetSpeed(2000)  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.058ms   
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSpeed()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.002ms returns 2000  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - SWD clock set to 2000kHz
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.001ms returns -1  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_GetSN()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.002ms returns -1  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_HasError()  
+[2025-Oct-27 17:35:12] [trace] [  JLink] - - 0.018ms   
+[2025-Oct-27 17:35:12] [trace] [  JLink] - JLINK_Close()  
+[2025-Oct-27 17:35:12] [error] [ Client] - Encountered error -102: Command connect_to_emu_with_snr executed for 59 milliseconds with result -102
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [error] [ Worker] - An unknown error.
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Command connect_to_emu_with_snr executed for 53 milliseconds with result -102
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - close
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - close
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - disconnect_from_emu
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - is_connected_to_emu
+[2025-Oct-27 17:35:12] [debug] [SeggerBackend] - Segger Backend closed.
+[2025-Oct-27 17:35:12] [debug] [  nRF52] - nRF family DLL closed
+[2025-Oct-27 17:35:12] [trace] [ Client] - Command close executed for 59 milliseconds with result 0
+[2025-Oct-27 17:35:12] [debug] [ Client] - terminate
+[2025-Oct-27 17:35:12] [trace] [ Client] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Command close executed for 42 milliseconds with result 0
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Command terminate executed for 0 milliseconds with result 0
+[2025-Oct-27 17:35:12] [trace] [ Worker] - Executed 6 commands for 101 milliseconds
+[2025-Oct-27 17:35:12] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 17:35:12] [debug] [ Client] - Worker process exited with code: 0
+[2025-Oct-27 17:35:12] [debug] [ Client] - Child process terminated with result 0
+[2025-Oct-27 17:35:12] [trace] [ Client] - Executed 6 commands for 174 milliseconds
+[2025-Oct-27 17:35:12] [debug] [ Client] - terminate

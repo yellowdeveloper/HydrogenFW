@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "gpio.h": "c",
+        "kernel.h": "c",
+        "uart.h": "c",
+        "i2c.h": "c",
+        "stdio.h": "c",
+        "cmath": "c",
+        "adc.h": "c",
+        "pc.h": "c"
+    }
+}
