@@ -5,6 +5,7 @@
 uint8_t WRITE_CONF0[2];
 uint8_t pga_gain;
 int32_t digital_count;
+uint8_t now_command;
 
 static const struct device *i2c = DEVICE_DT_GET(I2C_NODE);
 

@@ -16,3 +16,7 @@ uint8_t read_cmd(const uint8_t *received_buff, uint32_t size) {
 
     return received_buff[4];
 }
+
+void handle_received_cmd(uint8_t cmd) {
+    
+}

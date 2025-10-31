@@ -32,6 +32,7 @@ extern uint8_t WRITE_CONF3[2];
 // EDITABLE VARIABLES
 extern uint8_t pga_gain; // 0 = 1 / 2 = 2 / 4 = 4 / 6 = 8 ... 14 = 128
 extern int32_t digital_count;
+extern uint8_t now_command;
 
 // FUNCTION DEFINE
 extern void adc_write(const uint8_t *write_buff, uint32_t size);

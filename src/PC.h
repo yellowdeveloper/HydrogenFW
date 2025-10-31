@@ -13,5 +13,6 @@
 #define FOOTER4 0x22
 
 extern uint8_t read_cmd(const uint8_t *received_buff, uint32_t size);
+extern void handle_received_cmd(uint8_t cmd);
 
 #endif
