@@ -7,6 +7,9 @@
         "stdio.h": "c",
         "cmath": "c",
         "adc.h": "c",
-        "pc.h": "c"
+        "pc.h": "c",
+        "initializer_list": "c",
+        "compare": "c",
+        "fifo.h": "c"
     }
 }

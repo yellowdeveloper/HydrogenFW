@@ -30,15 +30,17 @@ extern uint8_t WRITE_CONF2[2];
 extern uint8_t WRITE_CONF3[2];
 
 // EDITABLE VARIABLES
-extern uint8_t pga_gain; // 0 = 1 / 2 = 2 / 4 = 4 / 6 = 8 ... 14 = 128
+extern uint8_t pga_gain; // square value of gain (real gain = 2^pga_gain)
+extern uint32_t data_rate; // data rate of reading adc (20 ~ 2000)
 extern int32_t digital_count;
-extern uint8_t now_command;
 
 // FUNCTION DEFINE
-extern void adc_write(const uint8_t *write_buff, uint32_t size);
-extern void adc_receive(uint8_t *receive_buff, uint32_t size);
-extern void adc_write_reg(uint8_t addr, uint8_t mux, uint8_t gain, uint8_t pga_en);
+extern int adc_write(const uint8_t *write_buff, uint32_t size);
+extern int adc_receive(uint8_t *receive_buff, uint32_t size);
+extern void adc_write_conf0(uint8_t setting);
+extern void adc_write_conf1(uint8_t setting);
 extern void adc_read_reg(uint8_t addr);
+extern int32_t get_data_rate(uint8_t dara_rate_byte);
 extern void get_digital_count(const uint8_t *received_buff);
-extern double get_actual_voltage(uint32_t dc);
+extern double get_actual_voltage(int32_t dc);
 #endif
