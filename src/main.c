@@ -219,13 +219,23 @@ void adc_send_value() {
 	int ret;
 	ret = adc_write((uint8_t[]){ CMD_START }, 1);
 	if (ret != 0) return;
-
+	
 	int sleep_time = 1000 / data_rate;
-	k_msleep(sleep_time+1);
+	k_msleep(sleep_time);
 
 	adc_read_reg(CONF2_REG);
 	adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
-	if (!(REC_REG_BUF_1[0] & 0x80)) return;
+
+	int cnt = 0;
+
+	while (!(REC_REG_BUF_1[0] & 0x80)) {
+		k_msleep(1);
+		cnt++;
+		adc_read_reg(CONF2_REG);
+		adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
+
+		if (cnt == ADC_TIMEOUT) return;
+	};
 
 	ret = adc_write((uint8_t[]){ CMD_RDATA }, 1);
 	if (ret != 0) return;

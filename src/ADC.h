@@ -16,6 +16,8 @@
 #define CMD_RESET    0x03 << 1  // 0000 011x
 #define CMD_PW_DONW  0x01 << 1  // 0000 001x
 
+#define ADC_TIMEOUT 10
+
 // I2C NODE
 #define I2C_NODE DT_NODELABEL(arduino_i2c)
 
