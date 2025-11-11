@@ -16,7 +16,7 @@
 #define CMD_RESET    0x03 << 1  // 0000 011x
 #define CMD_PW_DONW  0x01 << 1  // 0000 001x
 
-#define ADC_TIMEOUT 10
+#define ADC_TIMEOUT 100
 
 // I2C NODE
 #define I2C_NODE DT_NODELABEL(arduino_i2c)
@@ -39,6 +39,7 @@ extern int32_t digital_count;
 // FUNCTION DEFINE
 extern int adc_write(const uint8_t *write_buff, uint32_t size);
 extern int adc_receive(uint8_t *receive_buff, uint32_t size);
+extern int adc_read_write(uint8_t *receive_buff, uint32_t size_r, const uint8_t *write_buff, uint32_t size_w);
 extern void adc_write_conf0(uint8_t setting);
 extern void adc_write_conf1(uint8_t setting);
 extern void adc_read_reg(uint8_t addr);

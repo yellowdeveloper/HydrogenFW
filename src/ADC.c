@@ -51,6 +51,14 @@ int adc_receive(uint8_t *receive_buff, uint32_t size) {
     return ret;
 }
 
+// Read & Write Function Integrated
+int adc_read_write(uint8_t *receive_buff, uint32_t size_r, const uint8_t *write_buff, uint32_t size_w) {
+    int ret;
+	ret = i2c_write_read(i2c, SLAVE_ADDR, write_buff, size_w, receive_buff, size_r);
+
+    return ret;
+}
+
 // Set Configuration Register
 // CONF0 DEFAULT :: mux = 0011 : AINP = AIN1, AINN = AIN0, gain = 000 : gain = 1, pga_en = 0 : PGA enabled (default)
 void adc_write_conf0(uint8_t setting) {

@@ -11,5 +11,8 @@
         "initializer_list": "c",
         "compare": "c",
         "fifo.h": "c"
+    },
+    "nrf-connect.debugging.bindings": {
+        "${workspaceFolder}/build": "Launch build"
     }
 }

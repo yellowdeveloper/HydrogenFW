@@ -16,7 +16,7 @@
 
 /* Devicetree node identifiers */
 #define LED0_NODE DT_ALIAS(led0)
-#define UART_NODE DT_NODELABEL(uart0)
+#define DRDY_NODE DT_ALIAS(customgpio1)
 
 /*
  * A build error on this line means your board is unsupported.
@@ -24,21 +24,30 @@
  */
 
 static const struct gpio_dt_spec led0 = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-//static const struct device *uart = DEVICE_DT_GET(UART_NODE);
+static const struct gpio_dt_spec customgpio1 = GPIO_DT_SPEC_GET(DRDY_NODE, gpios);
+
+static struct gpio_callback drdy_cb;
 
 // buffer to receive data from ADC
 uint8_t REC_DAT_BUF[3];
 uint8_t REC_REG_BUF_1[1];
 
 // Buffer to send data to PC
+uint8_t STRT_BUF[5] = {0x00, 0x00, 0x00, 0x00, 0xAA};
 uint8_t SND_DAT_BUF_RAW[11];
 uint8_t SND_DAT_BUF_LPF[19];
 uint8_t SND_DAT_BUF_AVG[27];
+
+//K_MSGQ_DEFINE(adc_queue, sizeof(REC_DAT_BUF), 32, 4);
 
 // Thread Resoures For ADC Test
 K_SEM_DEFINE(adc_loop_semaphore, 0, 1);
 K_THREAD_STACK_DEFINE(adc_loop_stack, 1024);
 struct k_thread adc_loop_thread;
+
+K_SEM_DEFINE(drdy_sem, 0, 1);
+//K_THREAD_STACK_DEFINE(adc_send_stack, 1024);
+//struct k_thread adc_send_thread;
 
 // reset gpio pins
 int reset_pin() {
@@ -48,17 +57,84 @@ int reset_pin() {
 
 	ret = gpio_pin_configure_dt(&led0, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) return 0;
+
+	if (!device_is_ready(customgpio1.port)) return 0;
+
+    ret = gpio_pin_configure_dt(&customgpio1, GPIO_INPUT);
+    if (ret < 0) return 0;
+
+	ret = gpio_pin_interrupt_configure_dt(&customgpio1, GPIO_INT_EDGE_TO_ACTIVE);
+    if (ret != 0) return 0;
+}
+
+void drdy_isr_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins) {
+    k_sem_give(&drdy_sem);
 }
 
 int adc_loop_thread_entry() {
 	while(1) {
 		if (k_sem_take(&adc_loop_semaphore, K_FOREVER) == 0 && adc_flag == 1) {
+			int ret;
+			ret = adc_write((uint8_t[]){ CMD_START }, 1);
+			if (ret != 0) continue;
+
 			while(adc_flag == 1){
 				//adc_test(); // to print debug message
-				adc_send_value();
+				adc_read_value();
 			}
+			
+			ret = adc_write((uint8_t[]){ CMD_PW_DONW }, 1);
+			if (ret != 0) continue;
 		}
 	}
+}
+void DATARATE_TEST() {
+	// WRITE RESET COMMAND TO ADC
+	printf("\n**************************************************\n");
+	printf("\n- Reset ADC\n");
+	adc_write((uint8_t[]){ CMD_RESET }, 1);
+
+	// WRITE DATA REGISTER (CONFIGURATION REGISTER 0)
+	printf("\n- Change Configuration Register 0 :: %02X\n", conf0_set);
+	adc_write_conf0(conf0_set);
+
+	printf("\n- Change Configuration Register 1 :: %02X\n", conf1_set);
+	adc_write_conf1(0xC8);
+
+	adc_write((uint8_t[]){ CMD_START }, 1);
+
+	int received = 0;
+	uint32_t start_cycles = k_cycle_get_32();
+	while (received < 1000) {
+		// WRITE START DATA CONVERSION COMMAND TO ADC
+		int cnt = 0;
+
+		do {
+			cnt++;
+			adc_read_reg(CONF2_REG);
+			adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
+
+			if (cnt == ADC_TIMEOUT) return;
+		} while (k_sem_take(&drdy_sem, K_MSEC(1)) == 0);
+
+		int ret;
+		ret = adc_write((uint8_t[]){ CMD_RDATA }, 1);
+		if (ret != 0) return;
+		ret = adc_receive(REC_DAT_BUF, sizeof(REC_DAT_BUF));
+		if (ret != 0) return;
+
+		received++;
+	}
+	uint32_t end_cycles = k_cycle_get_32();
+    uint32_t cycles_spent = end_cycles - start_cycles;
+
+    uint64_t ns_spent = k_cyc_to_ns_floor64(cycles_spent);
+    uint32_t us_spent = (uint32_t)(ns_spent / 1000);
+    uint32_t ms_spent = (uint32_t)(us_spent / 1000);
+
+    printf("Time Spent: %d, Sample Count: %d", ms_spent, received);
+
+	adc_write((uint8_t[]){ CMD_PW_DONW }, 1);
 }
 
 void adc_test() {
@@ -215,27 +291,23 @@ int filter_adjust() {
 	return ret;
 }
 
-void adc_send_value() {
+void adc_read_value() {
 	int ret;
-	ret = adc_write((uint8_t[]){ CMD_START }, 1);
-	if (ret != 0) return;
-	
+	int cnt = 0;
+
 	int sleep_time = 1000 / data_rate;
 	k_msleep(sleep_time);
 
-	adc_read_reg(CONF2_REG);
-	adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
-
-	int cnt = 0;
-
-	while (!(REC_REG_BUF_1[0] & 0x80)) {
-		k_msleep(1);
+	do {
 		cnt++;
 		adc_read_reg(CONF2_REG);
 		adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
 
 		if (cnt == ADC_TIMEOUT) return;
-	};
+	} while (!(REC_REG_BUF_1[0] & 0x80));
+
+	//ret = adc_read_write(REC_DAT_BUF, sizeof(REC_DAT_BUF), (uint8_t[]){ CMD_RDATA }, 1);
+	//if (ret != 0) return;
 
 	ret = adc_write((uint8_t[]){ CMD_RDATA }, 1);
 	if (ret != 0) return;
@@ -246,30 +318,42 @@ void adc_send_value() {
 
 	ret = filter_adjust();
 	if (ret != 0) return;
+
+	//gpio_pin_toggle_dt(&led0);
+}
+
+void adc_send_value() {
+	int ret = 0;
+	get_digital_count(REC_DAT_BUF);
+
+	ret = filter_adjust();
+	if (ret != 0) return;
 	// printf("\n%d\n", digital_count);
 
-	gpio_pin_toggle_dt(&led0);
+	//gpio_pin_toggle_dt(&led0);
 }
 
 int main(void)
 {
-	// uart_tx(uart, receive_buffer, sizeof(receive_buffer), SYS_FOREVER_US);
-
 	// PROGRAM START NOTICE
 	reset_pin();
-	// printf("Hello_World\n");
-
-	for(int i = 0; i <= 3; i++) {
-		gpio_pin_toggle_dt(&led0);
-		k_msleep(500);
-	}
+	
+	gpio_init_callback(&drdy_cb, drdy_isr_callback, BIT(customgpio1.pin));
+	gpio_add_callback(customgpio1.port, &drdy_cb);
 
 	k_thread_create(&adc_loop_thread, adc_loop_stack, K_THREAD_STACK_SIZEOF(adc_loop_stack),
 	adc_loop_thread_entry, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
 
 	callback_set_pc_uart();
 	rx_enable_pc_uart();
-	
+
+	//uart_send_pc(STRT_BUF, sizeof(STRT_BUF));
+
+	for(int i = 0; i <= 4; i++) {
+		gpio_pin_toggle_dt(&led0);
+		k_msleep(200);
+	}
+	DATARATE_TEST();
 	// adc_reset
 	adc_write((uint8_t[]){ CMD_RESET }, 1);
 
@@ -278,7 +362,7 @@ int main(void)
 			process_cmd(now_command, &adc_loop_semaphore);
 			
 			adc_write_conf0(conf0_set);
-			adc_write_conf1(conf1_set);
+			adc_write_conf1(0xC8);
 		}
 		// now_command = 0;
 		// memset(REC_CMD_BUF, 0, sizeof(REC_CMD_BUF));
