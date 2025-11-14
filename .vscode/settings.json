@@ -10,7 +10,8 @@
         "pc.h": "c",
         "initializer_list": "c",
         "compare": "c",
-        "fifo.h": "c"
+        "fifo.h": "c",
+        "type_traits": "c"
     },
     "nrf-connect.debugging.bindings": {
         "${workspaceFolder}/build": "Launch build"

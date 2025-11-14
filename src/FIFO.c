@@ -15,7 +15,7 @@ int is_queue_full(Queue *Q) {
     return Q->count == Q->size;
 }
 
-void enqueue(Queue *Q, double data) {
+void enqueue(Queue *Q, int32_t data) {
     if (is_queue_full(Q)) ; // Queue Full
     else {
         Q->back = (Q->back + 1) % Q->size;
@@ -33,7 +33,7 @@ void dequeue(Queue *Q) {
 }
 
 double queue_content_sum(Queue *Q) {
-    double sum = 0;
+    int32_t sum = 0;
     int index = Q->front;
     for (int i = 0; i < Q->count; i++) {
         index = (index + 1) % Q->size;

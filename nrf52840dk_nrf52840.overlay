@@ -10,25 +10,6 @@
 
 // For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
 // You can also visit the nRF DeviceTree extension documentation at https://docs.nordicsemi.com/bundle/nrf-connect-vscode/page/guides/ncs_configure_app.html#devicetree-support-in-the-extension
-
-/ {
-    aliases {
-        customgpio1 = &customgpio1;
-    };
-    customs {
-        compatible = "gpio-keys";
-        customgpio1: custom_gpio_1 {
-            gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-            label = "DRDY INTERRUPT";
-        };
-    };
-};   
-
-&customgpio1 {
-    gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
-};
-
-
 &led0 {
     gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
 };

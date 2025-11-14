@@ -6,16 +6,18 @@
 
 static const struct device *uart = DEVICE_DT_GET(UART_NODE);
 
-double prev_filtered = 0.0;
+int32_t prev_filtered = 0;
 int adc_flag;
 uint8_t conf0_set = 0x30; // default == gain 1
 uint8_t conf1_set = 0x00; // default == dr 20
 uint8_t now_command;
+uint8_t saf_stat = SAF_DIS;
 uint8_t lpf_stat = LPF_DIS;
-uint8_t af_stat = AVG_DIS;
+uint8_t maf_stat = MAF_DIS;
 
 uint8_t REC_CMD_BUF[9];
-Queue AVG_SAMP_QUEUE;
+Queue MOV_AVG_QUEUE;
+Queue SAMP_AVG_QUEUE;
 
 K_SEM_DEFINE(uart_rec_semaphore, 0, 1);
 
@@ -49,40 +51,63 @@ uint8_t process_cmd(uint8_t cmd, struct k_sem *adc_loop_sem) {
     else if (cmd != 0 && (cmd & (0x1F)) == 0x00)
         conf1_set = cmd;
 
-    else if (cmd == 0xFA)
-        lpf_stat = LPF_EN;
-
-    else if (cmd == 0x2A || cmd == 0x4A || cmd == 0x8A) {
-        if (lpf_stat == LPF_DIS) lpf_stat = LPF_EN_TMP;
+    else if (cmd == 0x0A || cmd == 0x6A || cmd == 0xAA || cmd == 0xCA || cmd == 0xEA) {
         switch (cmd)
         {
-        case 0x2A:
-            af_stat = AVG_EN2;
+        case 0x0A:
+            saf_stat = SAF_EN2;
             break;
-
-        case 0x4A:
-            af_stat = AVG_EN4;
+        case 0x6A:
+            saf_stat = SAF_EN4;
             break;
-
-        case 0x8A:
-            af_stat = AVG_EN8;
+        case 0xAA:
+            saf_stat = SAF_EN8;
+            break;
+        case 0xCA:
+            saf_stat = SAF_EN16;
+            break;
+        case 0xEA:
+            saf_stat = SAF_EN32;
             break;
         default:
             break;
         }
-        queue_init_for_pc(af_stat);
+        queue_init(&SAMP_AVG_QUEUE, saf_stat);
+    }
+
+    else if (cmd == 0xFA) {
+        lpf_stat = LPF_EN;
+    }
+
+    else if (cmd == 0x2A || cmd == 0x4A || cmd == 0x8A) {
+        switch (cmd)
+        {
+        case 0x2A:
+            maf_stat = MAF_EN2;
+            break;
+        case 0x4A:
+            maf_stat = MAF_EN4;
+            break;
+        case 0x8A:
+            maf_stat = MAF_EN8;
+            break;
+        default:
+            break;
+        }
+        queue_init_for_pc(maf_stat);
     }
 
     else if (cmd == 0xFD) {
-        if (af_stat) af_stat = AVG_DIS;
         lpf_stat = LPF_DIS;
     }
 
     else if (cmd == 0x2D) {
-        if (lpf_stat == LPF_EN_TMP) lpf_stat = LPF_DIS;
-        af_stat = AVG_DIS;
-    }    
-        
+        maf_stat = MAF_DIS;
+    }
+    
+    else if (cmd == 0x4D) {
+        saf_stat = SAF_DIS;
+    }
 }
 
 static void uart_cb(const struct device *dev, struct uart_event *evt, void *user_data) {
@@ -116,24 +141,55 @@ void callback_set_pc_uart() {
 }
 
 extern void queue_init_for_pc(uint8_t samp) {
-    queue_init(&AVG_SAMP_QUEUE, samp);
+    queue_init(&MOV_AVG_QUEUE, samp);
 }
 
-double LPF(int32_t current_raw) {
-    double lp_filtered = ALPHA * (double)current_raw + (1.0-ALPHA) * prev_filtered;
+int32_t SAF(int32_t current, uint8_t samp) {
+    if (is_queue_full(&SAMP_AVG_QUEUE)) { queue_init(&SAMP_AVG_QUEUE, samp); }
+    enqueue(&SAMP_AVG_QUEUE, current);
+    if (SAMP_AVG_QUEUE.count == samp) {
+        int32_t samp_avg_filtered = queue_content_sum(&SAMP_AVG_QUEUE) / samp;
+        return samp_avg_filtered;
+    }
+    return 0;
+}
+
+int32_t LPF(int32_t current) {
+    int32_t lp_filtered = ALPHA * (double)current + (1.0-ALPHA) * (double)prev_filtered;
     prev_filtered = lp_filtered;
     return lp_filtered;
 }
 
-double AF(double current) {
-    if (is_queue_full(&AVG_SAMP_QUEUE)) { dequeue(&AVG_SAMP_QUEUE); }
-    enqueue(&AVG_SAMP_QUEUE, current);
-    double avg_filtered = queue_content_sum(&AVG_SAMP_QUEUE) / (double)AVG_SAMP_QUEUE.count;
-    return avg_filtered;
+int32_t MAF(int32_t current) {
+    if (is_queue_full(&MOV_AVG_QUEUE)) { dequeue(&MOV_AVG_QUEUE); }
+    enqueue(&MOV_AVG_QUEUE, current);
+    int32_t mov_avg_filtered = (double)queue_content_sum(&MOV_AVG_QUEUE) / (double)MOV_AVG_QUEUE.count;
+    return mov_avg_filtered;
 }
 
 int uart_send_pc(const uint8_t *buf, uint32_t size) {
     int ret;
     ret = uart_tx(uart, buf, size, SYS_FOREVER_US);
     return ret;
+}
+
+int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff, uint32_t filterbuff_size) {
+    int ret;
+
+    sendbuff[0] = HEADER1;
+    sendbuff[1] = HEADER2;
+    sendbuff[2] = HEADER3;
+    sendbuff[3] = HEADER4;
+
+    for (int i= 4; i< sendbuff_size - 4; i++) {
+        sendbuff[i] = filterbuff[i - 4];
+    }
+
+    sendbuff[sendbuff_size - 4]  = FOOTER1;
+    sendbuff[sendbuff_size - 3]  = FOOTER2;
+    sendbuff[sendbuff_size - 2]  = FOOTER3;
+    sendbuff[sendbuff_size - 1]  = FOOTER4;
+
+	ret = uart_send_pc(sendbuff, sendbuff_size);
+	return ret;
 }
