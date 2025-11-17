@@ -94,7 +94,7 @@ uint8_t process_cmd(uint8_t cmd, struct k_sem *adc_loop_sem) {
         default:
             break;
         }
-        queue_init_for_pc(maf_stat);
+        queue_init(&MOV_AVG_QUEUE, maf_stat);
     }
 
     else if (cmd == 0xFD) {
@@ -138,10 +138,6 @@ void callback_set_pc_uart() {
 	if (ret != 0) {
 		printf("ERROR setting callback");
 	}
-}
-
-extern void queue_init_for_pc(uint8_t samp) {
-    queue_init(&MOV_AVG_QUEUE, samp);
 }
 
 int32_t SAF(int32_t current, uint8_t samp) {

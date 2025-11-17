@@ -192,9 +192,21 @@ int check_filter(int32_t dc) {
 	uint8_t inserted = 0;
 	uint32_t size = 8;
 
+	if (saf_stat) {
+        last_filtered = SAF(last_filtered, saf_stat);
+
+		if (last_filtered == 0) return 0;
+    }
+
 	unsigned char byteArray[6+sizeof(int32_t)*3];
 	memcpy(byteArray, GET_DAT_TMP, 3);
 	inserted += 3;
+
+	if (saf_stat) {
+		byteArray[inserted] = FILTER0;
+		memcpy(byteArray + inserted + 1, &last_filtered, sizeof(int32_t));
+		inserted += 5;
+    }
 
 	if (lpf_stat) {
         last_filtered = LPF(last_filtered);
@@ -281,7 +293,7 @@ int main(void)
 
 	//uart_send_pc(STRT_BUF, sizeof(STRT_BUF));
 
-	for(int i = 0; i <= 4; i++) {
+	for(int i = 0; i <= 3; i++) {
 		gpio_pin_toggle_dt(&led0);
 		k_msleep(200);
 	}
