@@ -9,7 +9,7 @@ static const struct device *uart = DEVICE_DT_GET(UART_NODE);
 int32_t prev_filtered = 0;
 int adc_flag;
 uint8_t conf0_set = 0x30; // default == gain 1
-uint8_t conf1_set = 0x00; // default == dr 20
+uint8_t conf1_set = 0xA8; // default == dr 600, Conversion Mode == Continuous
 uint8_t now_command;
 uint8_t saf_stat = SAF_DIS;
 uint8_t lpf_stat = LPF_DIS;
@@ -26,13 +26,13 @@ uint8_t read_cmd(const uint8_t *received_buff, uint32_t size) {
         received_buff[1] != HEADER2 ||
         received_buff[2] != HEADER3 ||
         received_buff[3] != HEADER4 )
-        return 0;
+        return 0xFF;
     
     if (received_buff[5] != FOOTER1 ||
         received_buff[6] != FOOTER2 ||
         received_buff[7] != FOOTER3 ||
         received_buff[8] != FOOTER4 )
-        return 0;
+        return 0xFF;
 
     return received_buff[4];
 }
@@ -48,7 +48,7 @@ uint8_t process_cmd(uint8_t cmd, struct k_sem *adc_loop_sem) {
     else if ((cmd & 0xF0) == 0x30)
         conf0_set = cmd;
 
-    else if (cmd != 0 && (cmd & (0x1F)) == 0x00)
+    else if ((cmd & (0x1F)) == 0x08)
         conf1_set = cmd;
 
     else if (cmd == 0x0A || cmd == 0x6A || cmd == 0xAA || cmd == 0xCA || cmd == 0xEA) {

@@ -257,8 +257,6 @@ void adc_read_value() {
 	if (ret != 0) return;
 
 	if (k_msgq_put(&adc_queue, REC_DAT_TMP, K_NO_WAIT) != 0) {}
-
-	//gpio_pin_toggle_dt(&led0);
 }
 
 void adc_send_value() {
@@ -272,9 +270,7 @@ void adc_send_value() {
 		if (ret != 0) return;
 	}
 
-	// printf("\n%d\n", digital_count);
-
-	//gpio_pin_toggle_dt(&led0);
+	gpio_pin_toggle_dt(&led0);
 }
 
 int main(void)
@@ -306,7 +302,7 @@ int main(void)
 			process_cmd(now_command, &adc_loop_semaphore);
 			
 			adc_write_conf0(conf0_set);
-			adc_write_conf1(0xC8);
+			adc_write_conf1(conf1_set);
 		}
 		// now_command = 0;
 		// memset(REC_CMD_BUF, 0, sizeof(REC_CMD_BUF));
