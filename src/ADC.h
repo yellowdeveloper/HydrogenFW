@@ -2,7 +2,8 @@
 #define ADC_H
 
 // BASIC ADDRESSES & COMMANDS & VALUES
-#define SLAVE_ADDR   0x4F
+#define SLAVE_ADDR      0x4F
+#define DAC_SLAVE_ADDR  0x4C
 
 #define CONF0_REG    0x00       // Configuration0 Register Address
 #define CONF1_REG    0x01       // Configuration1 Register Address

@@ -104,6 +104,47 @@ void adc_read_reg(uint8_t addr) {
     adc_write((uint8_t[]){ addr }, 1);
 }
 
+uint16_t dac_calculate_count(double percent){
+    //double Vdac = 0.2752 + (percent / 100.0) * (1.376 - 0.2752);
+    double Vdac = 0.555 + (percent / 100.0) * (2.75 - 0.555);
+    double code_f = (Vdac / 3.3) * 65535.0;
+
+    uint16_t DAC_code;
+
+    if (code_f < 0) DAC_code = 0;
+    else if (code_f > 65535) DAC_code = 65535;
+    else DAC_code = (uint16_t)(code_f + 0.5);
+    
+    printf("code_f: %f, DAC_code: %d\n",code_f, DAC_code);
+
+    return DAC_code;
+}
+
+void dac_write_cont() {
+    int ret;
+    uint8_t write_buff[3];
+    write_buff[0] = 0x40;
+    write_buff[1] = 0x00;
+    write_buff[2] = 0x00;
+
+    ret = i2c_write(i2c, write_buff, 3, DAC_SLAVE_ADDR);
+}
+
+void dac_write_count(uint16_t count) {
+    int ret;
+    uint8_t write_buff[3];
+    write_buff[0] = 0x30;
+    write_buff[1] = (uint8_t)(count >> 8);
+    write_buff[2] = (uint8_t)(count << 8) >> 8;
+
+    ret = i2c_write(i2c, write_buff, 3, DAC_SLAVE_ADDR);
+}
+
+//void dac_read_count(){
+//    int ret;
+//    ret = i2c_read(i2c, receive_buff, size, SLAVE_ADDR);
+//}
+
 // based on normal mode (do not use turbo mode)
 int32_t get_data_rate(uint8_t dara_rate_byte) {
     switch (dara_rate_byte)

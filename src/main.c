@@ -10,6 +10,7 @@
 
 #include "ADC.h"
 #include "PC.h"
+#include "BT.h"
 
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME_MS   100
@@ -51,6 +52,18 @@ int reset_pin() {
 
 	ret = gpio_pin_configure_dt(&led0, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) return 0;
+
+	ret = hydro_bt_enable();
+	if (ret < 0) {
+		printf("Failed to Enable Bluetooth\n");
+		return 0;
+	}
+
+	ret = hydro_adv_start();
+	if (ret < 0) {
+		printf("Failed to Start Advertising\n");
+		return 0;
+	}
 }
 
 int adc_loop_thread_entry() {
@@ -287,13 +300,28 @@ int main(void)
 	callback_set_pc_uart();
 	rx_enable_pc_uart();
 
+	
+
 	//uart_send_pc(STRT_BUF, sizeof(STRT_BUF));
 
 	for(int i = 0; i <= 3; i++) {
 		gpio_pin_toggle_dt(&led0);
 		k_msleep(200);
 	}
-	//DATARATE_TEST();
+	
+	// DAT TEST: ERASE LATER
+	//dac_write_cont();
+	//while (1) {
+	//	uint16_t count = dac_calculate_count(100.0f);
+	//	dac_write_count(count);
+	//	printf("DIGITAL COUNT: %d\n", count);
+	//	gpio_pin_toggle_dt(&led0);
+	//	k_msleep(100);
+	//}
+
+	// DATARATE_TEST: ERASE LATER
+	// DATARATE_TEST();
+
 	// adc_reset
 	adc_write((uint8_t[]){ CMD_RESET }, 1);
 
