@@ -37,22 +37,22 @@
 #define UART_NODE DT_NODELABEL(uart0)
 
 
-extern uint8_t REC_CMD_BUF[9];
+extern uint8_t REC_CMD_BUF[10];
 
 extern int32_t prev_filtered;
 extern int adc_flag;
 extern uint8_t conf0_set; // default == gain 1
 extern uint8_t conf1_set; // default == dr 20
 extern struct k_sem uart_rec_semaphore;
-extern uint8_t now_command;
+extern uint16_t now_command;
 extern uint8_t saf_stat;
 extern uint8_t lpf_stat;
 extern uint8_t maf_stat;
 
 extern void rx_enable_pc_uart();
 extern void callback_set_pc_uart();
-extern uint8_t read_cmd(const uint8_t *received_buff, uint32_t size);
-extern uint8_t process_cmd(uint8_t cmd, struct k_sem *adc_loop_sem);
+extern uint16_t read_cmd(const uint8_t *received_buff, uint32_t size);
+extern uint8_t process_cmd(uint16_t cmd, struct k_sem *adc_loop_sem);
 extern void queue_init_for_pc(uint8_t samp);
 extern int32_t SAF(int32_t current_raw, uint8_t samp);
 extern int32_t LPF(int32_t current_raw);
