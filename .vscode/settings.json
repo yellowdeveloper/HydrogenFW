@@ -11,7 +11,17 @@
         "initializer_list": "c",
         "compare": "c",
         "fifo.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "gatt.h": "c",
+        "hci.h": "c",
+        "conn.h": "c",
+        "bluetooth.h": "c",
+        "array": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "string_view": "c"
     },
     "nrf-connect.debugging.bindings": {
         "${workspaceFolder}/build": "Launch build"

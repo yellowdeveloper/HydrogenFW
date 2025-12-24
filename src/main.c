@@ -44,8 +44,16 @@ struct k_thread adc_loop_thread;
 K_THREAD_STACK_DEFINE(adc_send_stack, 1024);
 struct k_thread adc_send_thread;
 
-// reset gpio pins
-int reset_pin() {
+// Thread Resources For Bluetooth Notify
+K_SEM_DEFINE(bt_loop_semaphore, 0, 1);
+K_THREAD_STACK_DEFINE(bt_loop_stack, 1024);
+struct k_thread bt_loop_thread;
+
+K_THREAD_STACK_DEFINE(bt_send_stack, 1024);
+struct k_thread bt_send_thread;
+
+// reset pin and initialize bluetooth
+int init_set() {
 	int ret;
 
 	if (!gpio_is_ready_dt(&led0)) return 0; 
@@ -53,12 +61,17 @@ int reset_pin() {
 	ret = gpio_pin_configure_dt(&led0, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) return 0;
 
+	// Bluetooth Initialization
 	ret = hydro_bt_enable();
 	if (ret < 0) {
 		printf("Failed to Enable Bluetooth\n");
 		return 0;
 	}
 
+	// GATT Callbacks Enable
+	enable_gatt_callbacks();
+
+	// BlueTooth Advertising Start
 	ret = hydro_adv_start();
 	if (ret < 0) {
 		printf("Failed to Start Advertising\n");
@@ -87,6 +100,14 @@ int adc_loop_thread_entry() {
 int adc_send_thread_entry() {
 	while(1) {
 		adc_send_value();
+	}
+}
+
+int bt_send_thread_entry() {
+	while(1) {
+		hydro_notify_data();
+
+		k_msleep(100);
 	}
 }
 
@@ -289,7 +310,7 @@ void adc_send_value() {
 int main(void)
 {
 	// PROGRAM START NOTICE
-	reset_pin();
+	init_set();
 
 	k_thread_create(&adc_loop_thread, adc_loop_stack, K_THREAD_STACK_SIZEOF(adc_loop_stack),
 	adc_loop_thread_entry, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
@@ -297,10 +318,11 @@ int main(void)
 	k_thread_create(&adc_send_thread, adc_send_stack, K_THREAD_STACK_SIZEOF(adc_send_stack),
 	adc_send_thread_entry, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
 
+	// k_thread_create(&bt_send_thread, bt_send_stack, K_THREAD_STACK_SIZEOF(bt_send_stack),
+	// bt_send_thread_entry, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
+
 	callback_set_pc_uart();
 	rx_enable_pc_uart();
-
-	
 
 	//uart_send_pc(STRT_BUF, sizeof(STRT_BUF));
 

@@ -187,5 +187,6 @@ int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff
     sendbuff[sendbuff_size - 1]  = FOOTER4;
 
 	ret = uart_send_pc(sendbuff, sendbuff_size);
+    ret = hydro_notify_data(sendbuff, sendbuff_size);
 	return ret;
 }
