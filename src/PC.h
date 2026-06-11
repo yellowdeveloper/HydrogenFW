@@ -58,5 +58,6 @@ extern int32_t SAF(int32_t current_raw, uint8_t samp);
 extern int32_t LPF(int32_t current_raw);
 extern int32_t MAF(int32_t current);
 extern int uart_send_pc(const uint8_t *buf, uint32_t size);
-extern int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff, uint32_t filterbuff_size);
+extern void add_crc(uint8_t *dst, uint8_t *src, size_t src_size);
+extern int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff);
 #endif

@@ -56,6 +56,10 @@ uint8_t process_cmd(uint16_t cmd, struct k_sem *adc_loop_sem) {
 
         check_control_cmd(ctrl_cmd, adc_loop_sem);
     }
+
+    else if (((cmd >> 8) & 0xFF) == 0xEC) { // == Extra Command
+        uint8_t ext_cmd = cmd & 0xFF;
+    }
 }
 
 void check_control_cmd(uint8_t ctrl_cmd, struct k_sem *adc_loop_sem) {
@@ -195,17 +199,37 @@ int uart_send_pc(const uint8_t *buf, uint32_t size) {
     return ret;
 }
 
-int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff, uint32_t filterbuff_size) {
-    int ret;
+void add_crc(uint8_t *dst, uint8_t *src, size_t src_size) {
+	uint8_t crc = 0x00;
+	uint8_t poly = 0x07;
 
+	for (size_t i =0; i < src_size; i++) {
+		crc ^= src[i];
+
+		for (int bit =0; bit < 8; bit++) {
+			if (crc & 0x80) crc = (crc << 1) ^ poly;
+			else crc = (uint8_t)(crc << 1);
+		}
+	}
+
+	memcpy(dst + 5 + src_size, &crc, 1);
+}
+
+int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff) {
+    int ret;
+    uint32_t data_length = sendbuff_size - 10;
+    
     sendbuff[0] = HEADER1;
     sendbuff[1] = HEADER2;
     sendbuff[2] = HEADER3;
     sendbuff[3] = HEADER4;
 
-    for (int i= 4; i< sendbuff_size - 4; i++) {
-        sendbuff[i] = filterbuff[i - 4];
+    sendbuff[4] = data_length;
+
+    for (int i= 5; i< sendbuff_size - 5; i++) {
+        sendbuff[i] = filterbuff[i - 5];
     }
+    add_crc(sendbuff, filterbuff, data_length);
 
     sendbuff[sendbuff_size - 4]  = FOOTER1;
     sendbuff[sendbuff_size - 3]  = FOOTER2;

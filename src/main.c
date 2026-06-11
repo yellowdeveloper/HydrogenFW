@@ -32,7 +32,7 @@ uint8_t REC_REG_BUF_1[1];
 
 // Buffer to send data to PC
 uint8_t STRT_BUF[5] = {0x00, 0x00, 0x00, 0x00, 0xAA};
-uint8_t SND_DAT_BUF[26];
+uint8_t SND_DAT_BUF[28];
 
 K_MSGQ_DEFINE(adc_queue, sizeof(REC_DAT_TMP), 32, 4);
 
@@ -224,7 +224,7 @@ int check_filter(int32_t dc) {
 	int ret;
 	int32_t last_filtered = dc;
 	uint8_t inserted = 0;
-	uint32_t size = 8;
+	uint32_t size = 10;
 
 	if (saf_stat) {
         last_filtered = SAF(last_filtered, saf_stat);
@@ -259,7 +259,7 @@ int check_filter(int32_t dc) {
     }
 	size += inserted;
 
-	ret = filter_adjust(SND_DAT_BUF, size, byteArray, 3);
+	ret = filter_adjust(SND_DAT_BUF, size, byteArray);
 	return ret;
 }
 
