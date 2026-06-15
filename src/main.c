@@ -11,6 +11,7 @@
 #include "ADC.h"
 #include "PC.h"
 #include "BT.h"
+#include "COMMON_SEM.h"
 
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME_MS   100
@@ -35,6 +36,8 @@ uint8_t STRT_BUF[5] = {0x00, 0x00, 0x00, 0x00, 0xAA};
 uint8_t SND_DAT_BUF[28];
 
 K_MSGQ_DEFINE(adc_queue, sizeof(REC_DAT_TMP), 32, 4);
+
+K_SEM_DEFINE(rec_semaphore, 0, 1);
 
 // Thread Resoures For ADC Test
 K_SEM_DEFINE(adc_loop_semaphore, 0, 1);
@@ -348,7 +351,7 @@ int main(void)
 	adc_write((uint8_t[]){ CMD_RESET }, 1);
 
 	while (1) {
-		if (k_sem_take(&uart_rec_semaphore, K_FOREVER) == 0) {
+		if (k_sem_take(&rec_semaphore, K_FOREVER) == 0) {
 			process_cmd(now_command, &adc_loop_semaphore);
 			
 			adc_write_conf0(conf0_set);

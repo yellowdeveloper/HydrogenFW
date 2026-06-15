@@ -120,7 +120,7 @@ uint16_t dac_calculate_count(double percent){
     return DAC_code;
 }
 
-void dac_write_cont() {
+void dac_write_conf() {
     int ret;
     uint8_t write_buff[3];
     write_buff[0] = 0x40;

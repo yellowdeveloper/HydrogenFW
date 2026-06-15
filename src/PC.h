@@ -43,7 +43,6 @@ extern int32_t prev_filtered;
 extern int adc_flag;
 extern uint8_t conf0_set; // default == gain 1
 extern uint8_t conf1_set; // default == dr 20
-extern struct k_sem uart_rec_semaphore;
 extern uint16_t now_command;
 extern uint8_t saf_stat;
 extern uint8_t lpf_stat;

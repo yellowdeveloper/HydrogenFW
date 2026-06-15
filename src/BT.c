@@ -1,9 +1,12 @@
-#include "BT.h"
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/bluetooth/hci.h>
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/bluetooth/gatt.h>
+
+#include "BT.h"
+#include "PC.h"
+#include "COMMON_SEM.h"
 
 struct bt_conn *conn_connected;
 volatile bool is_notify_enabled = false;
@@ -30,13 +33,31 @@ static void hydro_ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t valu
     printf("Notification %s", is_notify_enabled ? "enabled" : "disabled");
 }
 
+ssize_t receive_callback(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+    const void *buf, uint16_t len, uint16_t offset, uint8_t flags)
+{
+    if (offset != 0) return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
+    if (len >= 10) {
+        uint16_t cmd = read_cmd(buf, len);
+        now_command = cmd;
+
+        if (cmd != 0) {
+            k_sem_give(&rec_semaphore);
+        }
+    }
+    
+    return len;
+}
+
 // Setting up GATT Characteristic and Service
 BT_GATT_SERVICE_DEFINE(hydro_svc,
 BT_GATT_PRIMARY_SERVICE(&hydro_service_uuid),
 BT_GATT_CHARACTERISTIC(&hydro_data_uuid.uuid,
-                        BT_GATT_CHRC_NOTIFY,
-                        BT_GATT_PERM_READ,
-                        NULL, NULL, NULL),
+                        BT_GATT_CHRC_NOTIFY | BT_GATT_CHRC_WRITE,
+                        BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
+                        NULL,
+                        receive_callback,
+                        NULL),
 BT_GATT_CCC(hydro_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
 );
 

@@ -1,8 +1,10 @@
 #include <stdio.h>
-#include "PC.h"
-#include "FIFO.h"
 #include <zephyr/drivers/uart.h>
 #include <zephyr/kernel.h>
+
+#include "PC.h"
+#include "FIFO.h"
+#include "COMMON_SEM.h"
 
 static const struct device *uart = DEVICE_DT_GET(UART_NODE);
 
@@ -18,8 +20,6 @@ uint8_t maf_stat = MAF_DIS;
 uint8_t REC_CMD_BUF[10];
 Queue MOV_AVG_QUEUE;
 Queue SAMP_AVG_QUEUE;
-
-K_SEM_DEFINE(uart_rec_semaphore, 0, 1);
 
 uint16_t read_cmd(const uint8_t *received_buff, uint32_t size) {
     if (received_buff[0] != HEADER1 ||
@@ -146,7 +146,7 @@ static void uart_cb(const struct device *dev, struct uart_event *evt, void *user
         now_command = cmd;
 
         if (cmd != 0) {
-            k_sem_give(&uart_rec_semaphore);
+            k_sem_give(&rec_semaphore);
         }
     }
     else if (evt->type == UART_RX_DISABLED) {
