@@ -114,115 +114,6 @@ int bt_send_thread_entry() {
 	}
 }
 
-void DATARATE_TEST() {
-	// WRITE RESET COMMAND TO ADC
-	printf("\n**************************************************\n");
-	printf("\n- Reset ADC\n");
-	adc_write((uint8_t[]){ CMD_RESET }, 1);
-
-	// WRITE DATA REGISTER (CONFIGURATION REGISTER 0)
-	printf("\n- Change Configuration Register 0 :: %02X\n", conf0_set);
-	adc_write_conf0(conf0_set);
-
-	printf("\n- Change Configuration Register 1 :: %02X\n", conf1_set);
-	adc_write_conf1(0xC8);
-
-	adc_write((uint8_t[]){ CMD_START }, 1);
-
-	int received = 0;
-	uint32_t start_cycles = k_cycle_get_32();
-	while (received < 1000) {
-		// WRITE START DATA CONVERSION COMMAND TO ADC
-		int cnt = 0;
-
-		do {
-			cnt++;
-			adc_read_reg(CONF2_REG);
-			adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
-
-			if (cnt == ADC_TIMEOUT) return;
-
-			if (!(REC_REG_BUF_1[0] & 0x80)) {
-            k_yield(); 
-        }
-		} while (!(REC_REG_BUF_1[0] & 0x80));
-
-		int ret;
-		ret = adc_write((uint8_t[]){ CMD_RDATA }, 1);
-		if (ret != 0) return;
-		ret = adc_receive(REC_DAT_TMP, sizeof(REC_DAT_TMP));
-		if (ret != 0) return;
-
-		received++;
-	}
-	uint32_t end_cycles = k_cycle_get_32();
-    uint32_t cycles_spent = end_cycles - start_cycles;
-
-    uint64_t ns_spent = k_cyc_to_ns_floor64(cycles_spent);
-    uint32_t us_spent = (uint32_t)(ns_spent / 1000);
-    uint32_t ms_spent = (uint32_t)(us_spent / 1000);
-
-	printf("Time Spent: %d, Sample Count: %d", ms_spent, received);
-
-	adc_write((uint8_t[]){ CMD_PW_DONW }, 1);
-}
-
-void adc_test() {
-    // WRITE RESET COMMAND TO ADC
-	printf("\n**************************************************\n");
-	printf("\n- Reset ADC\n");
-	adc_write((uint8_t[]){ CMD_RESET }, 1);
-
-
-	// WRITE DATA REGISTER (CONFIGURATION REGISTER 0)
-	printf("\n- Change Configuration Register 0 :: %02X\n", conf0_set);
-	adc_write_conf0(conf0_set);
-
-	printf("\n- Change Configuration Register 1 :: %02X\n", conf1_set);
-	adc_write_conf1(conf1_set);
-
-	// READ DATA REGISTER (CONFIGURATION REGISTER 0)
-	printf("\n- Read Configuration Register 0\n");
-	adc_read_reg(CONF0_REG);
-	adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
-	
-
-	// WRITE START DATA CONVERSION COMMAND TO ADC
-	printf("\n- Send Read Command to ADC\n");
-	adc_write((uint8_t[]){ CMD_START }, 1);
-	
-	int sleep_time = 1000 / data_rate;
-	printf("\n- Data Rate :: %d wait for %d ms\n", data_rate, sleep_time);
-	k_msleep(sleep_time);
-
-	// READ DATA REGISTER (CONFIGURATION REGISTER 3) :: TO CHECK DRDY VALUE
-	adc_read_reg(CONF2_REG);
-	adc_receive(REC_REG_BUF_1, sizeof(REC_REG_BUF_1));
-
-
-	// READ DATA FROM ADC
-	printf("\n- Read Data From ADC\n");
-	adc_write((uint8_t[]){ CMD_RDATA }, 1);
-	adc_receive(REC_DAT_TMP, sizeof(REC_DAT_TMP));
-
-	// SET RESULT VALUE AND PRINT
-	get_digital_count(REC_DAT_TMP); 
-	double v_in = get_actual_voltage(digital_count);
-	printf("Gain Set To: 2^%d\n", pga_gain);
-	printf("Digital Count: %02X: %d\n", digital_count, digital_count);
-	LPF(digital_count);
-	double avg_filtered = MAF(prev_filtered);
-	printf("DC After LPF: %lf\n", prev_filtered);
-	printf("DC After AF: %lf\n", avg_filtered);
-	printf("Voltage in = %lf\n", v_in);
-	printf("\n**************************************************\n");
-
-	// NOTICE USING LED
-	gpio_pin_toggle_dt(&led0);
-
-	// READ DATA END
-}
-
 int check_filter(int32_t dc) {
 	int ret;
 	int32_t last_filtered = dc;
@@ -333,19 +224,6 @@ int main(void)
 		gpio_pin_toggle_dt(&led0);
 		k_msleep(200);
 	}
-	
-	// DAT TEST: ERASE LATER
-	//dac_write_cont();
-	//while (1) {
-	//	uint16_t count = dac_calculate_count(100.0f);
-	//	dac_write_count(count);
-	//	printf("DIGITAL COUNT: %d\n", count);
-	//	gpio_pin_toggle_dt(&led0);
-	//	k_msleep(100);
-	//}
-
-	// DATARATE_TEST: ERASE LATER
-	// DATARATE_TEST();
 
 	// adc_reset
 	adc_write((uint8_t[]){ CMD_RESET }, 1);
