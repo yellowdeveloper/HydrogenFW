@@ -4,5 +4,6 @@
 #include <zephyr/kernel.h>
 
 extern struct k_sem rec_semaphore;
+extern struct k_sem fs_sem;
 
 #endif

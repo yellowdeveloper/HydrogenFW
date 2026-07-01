@@ -38,6 +38,7 @@
 
 
 extern uint8_t REC_CMD_BUF[10];
+extern char FS_REC_BUF[256];
 
 extern int32_t prev_filtered;
 extern int adc_flag;
@@ -47,6 +48,8 @@ extern uint16_t now_command;
 extern uint8_t saf_stat;
 extern uint8_t lpf_stat;
 extern uint8_t maf_stat;
+
+extern bool edit_calib;
 
 extern void rx_enable_pc_uart();
 extern void callback_set_pc_uart();

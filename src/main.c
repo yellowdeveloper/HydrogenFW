@@ -5,8 +5,14 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
+
+#include <zephyr/device.h>
+#include <zephyr/fs/fs.h>
+#include <zephyr/fs/littlefs.h>
+#include <zephyr/storage/flash_map.h>
 
 #include "ADC.h"
 #include "PC.h"
@@ -18,6 +24,12 @@
 
 /* Devicetree node identifiers */
 #define LED0_NODE DT_ALIAS(led0)
+
+/* Use dt node and declare entry ∵ Using automount in device tree */
+#define PARTITION_NODE DT_NODELABEL(lfs1)
+FS_FSTAB_DECLARE_ENTRY(PARTITION_NODE);
+
+struct fs_mount_t *mountpoint = &FS_FSTAB_ENTRY(PARTITION_NODE);
 
 /*
  * A build error on this line means your board is unsupported.
@@ -38,6 +50,7 @@ uint8_t SND_DAT_BUF[28];
 K_MSGQ_DEFINE(adc_queue, sizeof(REC_DAT_TMP), 32, 4);
 
 K_SEM_DEFINE(rec_semaphore, 0, 1);
+K_SEM_DEFINE(fs_sem, 0, 1);
 
 // Thread Resoures For ADC Test
 K_SEM_DEFINE(adc_loop_semaphore, 0, 1);
@@ -54,6 +67,143 @@ struct k_thread bt_loop_thread;
 
 K_THREAD_STACK_DEFINE(bt_send_stack, 1024);
 struct k_thread bt_send_thread;
+
+char fs_info_send[4096];
+
+int file_state = 0;
+struct fs_file_t file;
+
+static void lsdir(const char *path)
+{
+	int res;
+	struct fs_dir_t dirp;
+	static struct fs_dirent entry;
+
+	memset(fs_info_send, 0, sizeof(fs_info_send));
+
+	fs_dir_t_init(&dirp);
+
+	/* Verify fs_opendir() */
+	res = fs_opendir(&dirp, path);
+	if (res) {
+		strcpy(fs_info_send, "ERROR OPENING DIR");
+	}
+
+	strcpy(fs_info_send, path);
+	for (;;) {
+		/* Verify fs_readdir() */
+		res = fs_readdir(&dirp, &entry);
+
+		/* entry.name[0] == 0 means end-of-dir */
+		if (res || entry.name[0] == 0) {
+			if (res < 0) {
+				strcpy(fs_info_send, "ERROR READING DIR");
+			}
+			break;
+		}
+
+		char tmp[128];
+		if (entry.type == FS_DIR_ENTRY_DIR) {
+			
+			snprintf(tmp, sizeof(tmp), "\n[DIR] %s", entry.name);
+			strcat(fs_info_send, tmp);
+		} else {
+			snprintf(tmp, sizeof(tmp), "\n[FILE] %s (size = %zu)", entry.name, entry.size);
+			strcat(fs_info_send, tmp);
+		}
+	}
+
+	strcat(fs_info_send, "\nType \"add\", \"mod\", \"del\", \"ext\", \"ls\", \"seek\" And Press Enter");
+
+	/* Verify fs_closedir() */
+	fs_closedir(&dirp);
+}
+
+void create_file(char *fname) {
+	struct fs_file_t f;
+	int rc, ret;
+
+	memset(fs_info_send, 0, sizeof(fs_info_send));
+
+	fs_file_t_init(&f);
+
+	rc = fs_open(&f, fname, FS_O_CREATE | FS_O_RDWR);
+	if (rc < 0) {
+		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to open file %s: %d\n", fname, rc);
+	}
+
+	snprintf(fs_info_send, sizeof(fs_info_send), "file opened %s\n", fname);
+
+	fs_close(&f);
+}
+
+int open_file(struct fs_file_t *f, char* fname) {
+	int rc;
+
+	memset(fs_info_send, 0, sizeof(fs_info_send));
+
+	fs_file_t_init(f);
+
+	rc = fs_open(f, fname, FS_O_RDWR);
+	if (rc < 0) {
+		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to open file %s: %d\n", fname, rc);
+		return rc;
+	}
+
+	snprintf(fs_info_send, sizeof(fs_info_send), "opened file %s, enter new data or file name to copy:\n", fname);
+	return rc;
+}
+
+void write_and_close_file(struct fs_file_t *f, char* data) {
+	int rc;
+
+	memset(fs_info_send, 0, sizeof(fs_info_send));
+
+	rc = fs_write(f, data, strlen(data));
+	if (rc < 0) {
+		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to wtire to file: %d\n", rc);
+	}
+	snprintf(fs_info_send, sizeof(fs_info_send), "%d bytes successfully write to the file\n", rc);
+
+    fs_close(f);
+}
+
+void seek_file(char* fname) {
+	struct fs_file_t f;
+	int rc;
+
+	fs_file_t_init(&f);
+
+	memset(fs_info_send, 0, sizeof(fs_info_send));
+
+	rc = fs_open(&f, fname, FS_O_READ);
+	if (rc < 0) {
+		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to open file %s: %d\n", fname, rc);
+	}
+
+	rc = fs_read(&f, &fs_info_send, sizeof(fs_info_send));
+	if (rc < 0) {
+		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to read file %s: %d\n", fname, rc);
+	}
+
+    fs_close(&f);
+}
+
+void delete_file(char* fname) {
+	int rc;
+
+	memset(fs_info_send, 0, sizeof(fs_info_send));
+
+	rc = fs_unlink(fname);
+
+	if (rc < 0) {
+		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to delete file %s: %d\n", fname, rc);
+	}
+
+	snprintf(fs_info_send, sizeof(fs_info_send), "file deleted %s\n", fname);
+
+	return 0;
+}
 
 // reset pin and initialize bluetooth
 int init_set() {
@@ -229,6 +379,146 @@ int main(void)
 	adc_write((uint8_t[]){ CMD_RESET }, 1);
 
 	while (1) {
+		if (edit_calib) {
+			if (!file_state) {
+				lsdir(mountpoint->mnt_point);
+				uart_send_pc(fs_info_send, strlen(fs_info_send));
+				gpio_pin_toggle_dt(&led0);
+				file_state++;
+			}
+
+			if (k_sem_take(&fs_sem, K_FOREVER) == 0) {
+				if (file_state == 1)
+				{
+					if (FS_REC_BUF[0] == 'a' && FS_REC_BUF[1] == 'd' && FS_REC_BUF[2] == 'd') {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						char *msg = "Enter New File Name:";
+						uart_send_pc(msg, strlen(msg));
+						file_state = 2;
+
+						continue;
+					}
+
+					if (FS_REC_BUF[0] == 'm' && FS_REC_BUF[1] == 'o' && FS_REC_BUF[2] == 'd') {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						char *msg = "Name of file to modify:";
+						uart_send_pc(msg, strlen(msg));
+						file_state = 3;
+
+						continue;
+					}
+
+					if (FS_REC_BUF[0] == 'd' && FS_REC_BUF[1] == 'e' && FS_REC_BUF[2] == 'l') {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						char *msg = "Name of file to delete:";
+						uart_send_pc(msg, strlen(msg));
+						file_state = 4;
+
+						continue;
+					}
+
+					if (FS_REC_BUF[0] == 'e' && FS_REC_BUF[1] == 'x' && FS_REC_BUF[2] == 't') {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						file_state = 0;
+						edit_calib = false;
+						gpio_pin_toggle_dt(&led0);
+
+						continue;
+					}
+
+					if (FS_REC_BUF[0] == 'l' && FS_REC_BUF[1] == 's') {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						lsdir(mountpoint->mnt_point);
+						uart_send_pc(fs_info_send, strlen(fs_info_send));
+
+						continue;
+					}
+
+					if (FS_REC_BUF[0] == 's' && FS_REC_BUF[1] == 'e' && FS_REC_BUF[2] == 'e' && FS_REC_BUF[3] == 'k') {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						char *msg = "Name of file to seek:";
+						uart_send_pc(msg, strlen(msg));
+						file_state = 6;
+
+						continue;
+					}
+
+					memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+					char *msg = "Unkown Command\n";
+					uart_send_pc(msg, strlen(msg));
+					file_state = 1;
+					continue;
+				}
+				
+				// Create File (open file)
+				if (file_state == 2) {
+					char tmp[64];
+
+					snprintf(tmp, sizeof(tmp), "%s//%s", mountpoint->mnt_point, FS_REC_BUF);
+
+					create_file(tmp);
+					uart_send_pc(fs_info_send, strlen(fs_info_send));
+
+					memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+					file_state = 1;
+				}
+
+				// Modify file 1: open file
+				if (file_state == 3) {
+					char tmp[64];
+
+					snprintf(tmp, sizeof(tmp), "%s//%s", mountpoint->mnt_point, FS_REC_BUF);
+
+					if (open_file(&file ,tmp) < 0) {
+						memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+						uart_send_pc(fs_info_send, strlen(fs_info_send));
+						file_state = 1;
+						continue;
+					}
+
+					uart_send_pc(fs_info_send, strlen(fs_info_send));
+					
+					memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+					file_state = 5;
+
+					continue;
+				}
+
+				// Modify file 2: write new data
+				if (file_state == 5) {
+					write_and_close_file(&file, FS_REC_BUF);
+					uart_send_pc(fs_info_send, strlen(fs_info_send));
+
+					memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+					file_state = 1;
+				}
+
+				if (file_state == 6) {
+					char tmp[64];
+
+					snprintf(tmp, sizeof(tmp), "%s//%s", mountpoint->mnt_point, FS_REC_BUF);
+
+					seek_file(tmp);
+					uart_send_pc(fs_info_send, strlen(fs_info_send));
+
+					memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
+					file_state = 1;
+				}
+
+				// Delete File
+				if (file_state == 4) {
+					char tmp[64];
+
+					snprintf(tmp, sizeof(tmp), "%s//%s", mountpoint->mnt_point, FS_REC_BUF);
+
+					delete_file(tmp);
+					uart_send_pc(fs_info_send, strlen(fs_info_send));
+					file_state = 1;
+				}
+			}
+			/* open /lfs1/calib.bin and send to pc */
+			continue;
+		}
 		if (k_sem_take(&rec_semaphore, K_FOREVER) == 0) {
 			process_cmd(now_command, &adc_loop_semaphore);
 			

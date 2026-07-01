@@ -40,6 +40,31 @@
     status = "disabled";
 };
 
+/ {
+	fstab {
+		compatible = "zephyr,fstab";
+		lfs1: lfs1 {
+			compatible = "zephyr,fstab,littlefs";
+			mount-point = "/lfs1";
+			partition = <&storage_partition>;
+			// Enable automount cause system halt (mount fail)
+			// maybe because in boot time, there is no file system.
+			// so we should mount manually in source code
+			automount;
+			// read-size = <4>;
+			// prog-size = <4>;
+			// cache-size = <256>;
+			// lookahead-size = <32>;
+			// block-cycles = <512>;
+			// sample uses settings below but, if I use the settings below,
+			read-size = <16>;
+			prog-size = <16>;
+			cache-size = <64>;
+			lookahead-size = <16>;
+			block-cycles = <512>;
+		};
+	};
+};
 
 
 &reg1 {

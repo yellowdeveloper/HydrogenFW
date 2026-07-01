@@ -8,6 +8,8 @@
 
 static const struct device *uart = DEVICE_DT_GET(UART_NODE);
 
+K_SEM_DEFINE(uart_semaphore, 1, 1);
+
 int32_t prev_filtered = 0;
 int adc_flag;
 uint8_t conf0_set = 0x30; // default == gain 1
@@ -17,7 +19,15 @@ uint8_t saf_stat = SAF_DIS;
 uint8_t lpf_stat = LPF_DIS;
 uint8_t maf_stat = MAF_DIS;
 
+bool edit_calib = false;
+
 uint8_t REC_CMD_BUF[10];
+uint8_t REC_CMD_BUF_NEXT[10];
+uint8_t *next_buf = REC_CMD_BUF_NEXT;
+
+char FS_REC_BUF[256];
+static size_t fs_rx_pos = 0;
+
 Queue MOV_AVG_QUEUE;
 Queue SAMP_AVG_QUEUE;
 
@@ -76,6 +86,9 @@ void check_control_cmd(uint8_t ctrl_cmd, struct k_sem *adc_loop_sem) {
 
     else if ((ctrl_cmd & (0x1F)) == 0x08)
         conf1_set = ctrl_cmd;
+        
+    else if (ctrl_cmd == 0xFE)
+        edit_calib = true;
 }
 
 void filter_disable_cmd(uint8_t filter_cmd) {
@@ -142,17 +155,50 @@ void check_filter_cmd(uint8_t filter_cmd) {
 
 static void uart_cb(const struct device *dev, struct uart_event *evt, void *user_data) {
     if (evt->type == UART_RX_RDY) {
-        uint16_t cmd = read_cmd(REC_CMD_BUF, sizeof(REC_CMD_BUF));
+        if (edit_calib) {
+            char *buf = (char *)evt->data.rx.buf;
+
+            if (fs_rx_pos + evt->data.rx.len < sizeof(FS_REC_BUF)) {
+                memcpy(FS_REC_BUF + fs_rx_pos, 
+                        buf + evt->data.rx.offset, 
+                        evt->data.rx.len);
+                fs_rx_pos += evt->data.rx.len;
+            }
+
+            if (memchr(evt->data.rx.buf + evt->data.rx.offset, '\n', evt->data.rx.len)) {
+                FS_REC_BUF[fs_rx_pos] = '\0';
+
+                char *p = strchr(FS_REC_BUF, '\n');
+                if (p) {
+                    *p = '\0';
+                }
+                
+                fs_rx_pos = 0;
+                k_sem_give(&fs_sem);
+            }
+            
+            return;
+        }
+        uint16_t cmd = read_cmd(evt->data.rx.buf + evt->data.rx.offset, evt->data.rx.len);
         now_command = cmd;
 
         if (cmd != 0) {
             k_sem_give(&rec_semaphore);
         }
     }
+    else if (evt->type == UART_RX_BUF_REQUEST) {
+        uart_rx_buf_rsp(uart, next_buf, 10);
+    }
+    else if (evt->type == UART_RX_BUF_RELEASED) {
+        next_buf = evt->data.rx_buf.buf;
+    }
     else if (evt->type == UART_RX_DISABLED) {
             rx_enable_pc_uart();
             //rx enable
             //semaphor take
+    }
+    else if (evt->type == UART_TX_DONE || evt->type == UART_TX_ABORTED) {
+        k_sem_give(&uart_semaphore);
     }
 }
 
@@ -219,6 +265,8 @@ int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff
     int ret;
     uint32_t data_length = sendbuff_size - 10;
     
+    k_sem_take(&uart_semaphore, K_FOREVER);
+
     sendbuff[0] = HEADER1;
     sendbuff[1] = HEADER2;
     sendbuff[2] = HEADER3;
@@ -237,6 +285,9 @@ int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff
     sendbuff[sendbuff_size - 1]  = FOOTER4;
 
 	ret = uart_send_pc(sendbuff, sendbuff_size);
+    if (ret != 0) {
+        k_sem_give(&uart_semaphore);
+    }
     ret = hydro_notify_data(sendbuff, sendbuff_size);
 	return ret;
 }
