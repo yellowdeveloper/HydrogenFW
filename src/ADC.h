@@ -24,6 +24,7 @@
 
 // CONFIGURATION REGISTER SETTINGS
 // AINp = AIN1 | AINn = AIN0 | GAIN = 1 ~ 128 | PGA = 0 (default)
+// To Enable External AMP: Bypass PGA and get AINp from AIN2 (AVSS will be GND)
 extern uint8_t WRITE_CONF0[2];
 // (default)
 extern uint8_t WRITE_CONF1[2];

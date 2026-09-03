@@ -12,7 +12,7 @@ K_SEM_DEFINE(uart_semaphore, 1, 1);
 
 int32_t prev_filtered = 0;
 int adc_flag;
-uint8_t conf0_set = 0x30; // default == gain 1
+uint8_t conf0_set = 0x34; // default (gain 1): 0x30(= 00110000) | use external amp (gain 1): 0xA1(= 10100001)
 uint8_t conf1_set = 0xA8; // default == dr 600, Conversion Mode == Continuous
 uint16_t now_command;
 uint8_t saf_stat = SAF_DIS;
@@ -81,7 +81,7 @@ void check_control_cmd(uint8_t ctrl_cmd, struct k_sem *adc_loop_sem) {
     else if (ctrl_cmd == 0x02)
         adc_flag = 0;
 
-    else if ((ctrl_cmd & 0xF0) == 0x30)
+    else if ((ctrl_cmd & 0xF0) == 0x30 || (ctrl_cmd & 0xF0) == 0xA0)
         conf0_set = ctrl_cmd;
 
     else if ((ctrl_cmd & (0x1F)) == 0x08)
@@ -291,3 +291,5 @@ int filter_adjust(uint8_t *sendbuff, uint32_t sendbuff_size, uint8_t *filterbuff
     ret = hydro_notify_data(sendbuff, sendbuff_size);
 	return ret;
 }
+
+// TODO:: Add Calibration Logic

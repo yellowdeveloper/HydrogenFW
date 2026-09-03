@@ -355,6 +355,9 @@ int main(void)
 {
 	// PROGRAM START NOTICE
 	init_set();
+	
+	printf("HFCLKSTAT = 0x%08x\n", NRF_CLOCK->HFCLKSTAT);
+    printf("LFCLKSTAT = 0x%08x\n", NRF_CLOCK->LFCLKSTAT);
 
 	k_thread_create(&adc_loop_thread, adc_loop_stack, K_THREAD_STACK_SIZEOF(adc_loop_stack),
 	adc_loop_thread_entry, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
