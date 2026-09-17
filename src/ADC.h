@@ -2,7 +2,7 @@
 #define ADC_H
 
 // BASIC ADDRESSES & COMMANDS & VALUES
-#define SLAVE_ADDR      0x4F
+#define SLAVE_ADDR      0x41 // If ADS122C04's A0 / A1 = VDD / GND, then SLAVE_ADDR = 0x41 | A0 / A1 = SCL, then SLAVE_ADDR = 0x4F
 #define DAC_SLAVE_ADDR  0x4C
 
 #define CONF0_REG    0x00       // Configuration0 Register Address

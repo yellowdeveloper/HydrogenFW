@@ -12,7 +12,7 @@ K_SEM_DEFINE(uart_semaphore, 1, 1);
 
 int32_t prev_filtered = 0;
 int adc_flag;
-uint8_t conf0_set = 0x34; // default (gain 1): 0x30(= 00110000) | use external amp (gain 1): 0xA1(= 10100001)
+uint8_t conf0_set = 0xA1; // default (gain 1): 0x30(= 00110000) | use external amp (gain 1): 0xA1(= 10100001)
 uint8_t conf1_set = 0xA8; // default == dr 600, Conversion Mode == Continuous
 uint16_t now_command;
 uint8_t saf_stat = SAF_DIS;

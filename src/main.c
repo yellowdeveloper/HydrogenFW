@@ -14,7 +14,9 @@
 #include <zephyr/fs/littlefs.h>
 #include <zephyr/storage/flash_map.h>
 
+#include "BD_DEF.h"
 #include "ADC.h"
+#include "DAC.h"
 #include "PC.h"
 #include "BT.h"
 #include "COMMON_SEM.h"
@@ -373,6 +375,10 @@ int main(void)
 
 	//uart_send_pc(STRT_BUF, sizeof(STRT_BUF));
 
+	bd_init();
+	if (bd_init() != 0) {
+		return 0;
+	}
 	for(int i = 0; i <= 3; i++) {
 		gpio_pin_toggle_dt(&led0);
 		k_msleep(200);
