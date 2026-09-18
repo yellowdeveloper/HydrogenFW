@@ -388,6 +388,9 @@ int main(void)
 	adc_write((uint8_t[]){ CMD_RESET }, 1);
 
 	while (1) {
+		// TEST DAC
+		dac_write();
+		k_msleep(1000);
 		if (edit_calib) {
 			if (!file_state) {
 				lsdir(mountpoint->mnt_point);

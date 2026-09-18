@@ -63,7 +63,7 @@
 };
 
 &spi3 {
-	cs-gpios = <&gpio0 0 0>;
+	cs-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
 };
 
 &spi3_default {
