@@ -18,7 +18,7 @@ struct spi_config spi_cfg = {
 
 uint8_t tx_data[3];
 uint8_t tx_debug[10] = {0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90};
-uint8_t debug_cnt = 0;
+uint8_t debug_cnt = 5;
 
 struct spi_buf tx_buf = {
     .buf = tx_data,
@@ -47,7 +47,7 @@ int dac_write() {
 
     if (debug_cnt >= sizeof(tx_debug)) debug_cnt = 0;
     tx_data[0] = 0x00;
-    tx_data[1] = tx_debug[debug_cnt++];
+    tx_data[1] = tx_debug[debug_cnt];
     tx_data[2] = 0x00;
 
     ret = spi_write(spi, &spi_cfg, &tx);

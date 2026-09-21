@@ -75,8 +75,22 @@
 
 / {
 	zephyr,user {
-        sensor-vdd-on-gpios = <&gpio0 29 GPIO_ACTIVE_HIGH>;
-    };
+	    heater-vdd-on-gpios = <&gpio0 28 GPIO_ACTIVE_HIGH>;
+            sensor-vdd-on-gpios = <&gpio0 29 GPIO_ACTIVE_HIGH>;
+	    xtr-out-on-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+        };
+
+	my_inputs {
+		compatible = "gpio-leds";
+		my_input_pin: input_pin {
+		gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+		label = "Custom Input Pin";
+		};
+	};
+
+	aliases {
+		myinput = &my_input_pin;
+	};
 
 	fstab {
 		compatible = "zephyr,fstab";

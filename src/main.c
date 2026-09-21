@@ -390,6 +390,7 @@ int main(void)
 	while (1) {
 		// TEST DAC
 		dac_write();
+		read_xtr_err();
 		k_msleep(1000);
 		if (edit_calib) {
 			if (!file_state) {
