@@ -17,8 +17,8 @@ struct spi_config spi_cfg = {
 };
 
 uint8_t tx_data[3];
-uint8_t tx_debug[10] = {0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90};
-uint8_t debug_cnt = 5;
+uint8_t tx_debug[3] = {0x00, 0x90, 0xFF};
+uint8_t debug_cnt = 0;
 
 struct spi_buf tx_buf = {
     .buf = tx_data,
@@ -42,15 +42,28 @@ void dac_debug(void)
     printf("CS is GPIO     : %d\n", spi_cs_is_gpio(&spi_cfg));
 }
 
-int dac_write() {
+int dac_write(uint8_t *dat) {
     int ret;
 
     if (debug_cnt >= sizeof(tx_debug)) debug_cnt = 0;
-    tx_data[0] = 0x00;
-    tx_data[1] = tx_debug[debug_cnt];
-    tx_data[2] = 0x00;
+    tx_data[0] = dat[0];
+    tx_data[1] = dat[1];
+    tx_data[2] = dat[2];
+
+    // tx_data[0] = 0x00;
+    // tx_data[1] = tx_debug[debug_cnt++];
+    // tx_data[2] = 0x00;
 
     ret = spi_write(spi, &spi_cfg, &tx);
     // printf("DAC Write ret: %d\n", ret);
     return ret;
+}
+
+uint32_t conv_16bit_count(int32_t val) {
+    uint32_t res;
+
+    if (val < 0) res = 0;
+    if (val > 0) res = (uint32_t)(65535.0f * ((double)val / 8388607.0f));
+
+    return res;
 }

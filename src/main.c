@@ -305,6 +305,13 @@ int check_filter(int32_t dc) {
     }
 	size += inserted;
 
+	uint32_t dac_code = conv_16bit_count(last_filtered);
+	uint8_t tx_data[3];
+	tx_data[0] = 0x00;
+	tx_data[1] = (dac_code >> 8) & 0xFF;
+	tx_data[2] = dac_code & 0xFF;
+
+	dac_write(tx_data);
 	ret = filter_adjust(SND_DAT_BUF, size, byteArray);
 	return ret;
 }
@@ -382,6 +389,7 @@ int main(void)
 	for(int i = 0; i <= 3; i++) {
 		gpio_pin_toggle_dt(&led0);
 		k_msleep(200);
+		gpio_pin_set_dt(&led0, 0);
 	}
 
 	// adc_reset
@@ -389,9 +397,8 @@ int main(void)
 
 	while (1) {
 		// TEST DAC
-		dac_write();
-		read_xtr_err();
-		k_msleep(1000);
+		// dac_write();
+		// read_xtr_err();
 		if (edit_calib) {
 			if (!file_state) {
 				lsdir(mountpoint->mnt_point);
