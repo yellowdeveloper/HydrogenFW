@@ -3,6 +3,9 @@
 
 static const struct device *spi = DEVICE_DT_GET(SPI_NODE);
 
+int min_calib = 0;
+int max_calib = 8388608;
+
 struct spi_config spi_cfg = {
     .frequency = SPI_CLOCK_SLOW,
     .operation = SPI_OP_MODE_MASTER
@@ -62,8 +65,11 @@ int dac_write(uint8_t *dat) {
 uint32_t conv_16bit_count(int32_t val) {
     uint32_t res;
 
-    if (val < 0) res = 0;
-    if (val > 0) res = (uint32_t)(65535.0f * ((double)val / 8388607.0f));
+    if (val < min_calib) res = 0;
+    if (val > max_calib) res = 65535;
+    if (val >= min_calib && val <= max_calib) {
+        res = (uint32_t)(65535.0f * ((double)(val - min_calib) / (double)(max_calib - min_calib)));
+    }
 
     return res;
 }

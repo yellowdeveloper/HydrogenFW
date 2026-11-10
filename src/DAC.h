@@ -8,4 +8,7 @@
 
 #define SPI_NODE DT_NODELABEL(spi3)
 
+extern int min_calib;
+extern int max_calib;
+
 #endif // DAC_H
