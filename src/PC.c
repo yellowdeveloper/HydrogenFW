@@ -166,18 +166,17 @@ static void uart_cb(const struct device *dev, struct uart_event *evt, void *user
                         buf + evt->data.rx.offset, 
                         evt->data.rx.len);
                 fs_rx_pos += evt->data.rx.len;
-
-                if (file_state == 5) fx_pos += evt->data.rx.len;
             }
 
             if (file_state == 5) {
                 if (fx_len == 0) {
                     if (strncmp(FS_REC_BUF, "len: ", 5) == 0) {
                         fx_len = atoi(FS_REC_BUF + 5);
-                        uart_send_pc("LEN_OK\n", strlen("LEN_OK\n"));
-                        
                         memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
-                    } 
+                        uart_send_pc("LEN_OK\n", strlen("LEN_OK\n"));
+
+                        fs_rx_pos = 0;
+                    }
                     else {
                         fs_rx_pos = 0;
                         memset(FS_REC_BUF, 0, sizeof(FS_REC_BUF));
@@ -192,9 +191,15 @@ static void uart_cb(const struct device *dev, struct uart_event *evt, void *user
                     return;
                 }
 
-                if (fx_len >= 64 || fx_len >= fx_pos) {
+                if (fx_len > fx_pos) {
+                    fs_rx_pos = 0;
                     k_sem_give(&fs_sem);
+                    return;
                 }
+                
+                fx_pos = 0;
+                fx_len = 0;
+                file_state = 1;
             }
 
             if (memchr(evt->data.rx.buf + evt->data.rx.offset, '\n', evt->data.rx.len)) {

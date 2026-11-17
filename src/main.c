@@ -162,13 +162,13 @@ int open_file(struct fs_file_t *f, char* fname) {
 	return rc;
 }
 
-void write_and_close_file(struct fs_file_t *f, char* data) {
+void write_at(struct fs_file_t *f, char* data, int pos) {
 	int rc;
 	size_t len = strlen(data);
 
 	memset(fs_info_send, 0, sizeof(fs_info_send));
 
-	rc = fs_seek(f, 0, FS_SEEK_SET);
+	rc = fs_seek(f, pos, FS_SEEK_SET);
 	if (rc < 0) {
 		snprintf(fs_info_send, sizeof(fs_info_send), "FAIL to seek: %d\n", rc);
 		rc = fs_close(f);
@@ -182,6 +182,13 @@ void write_and_close_file(struct fs_file_t *f, char* data) {
 		return;
 	}
 	snprintf(fs_info_send, sizeof(fs_info_send), "%d bytes successfully write to the file\n", rc);
+}
+
+void write_and_close_at(struct fs_file_t *f, char* data, int pos) {
+	int rc;
+	size_t len = strlen(data) + pos;
+
+	write_at(f, data, pos);
 
 	rc = fs_truncate(f, (off_t)len);
     if (rc < 0) {
@@ -245,7 +252,7 @@ static void init_file_create(void)
     if (fs_open(&f, path, FS_O_READ) < 0) {
 		create_file(path);
 		open_file(&f, path);
-		write_and_close_file(&f, buf);
+		write_and_close_at(&f, buf, 0);
     }
 
 	fs_close(&f);
@@ -259,7 +266,7 @@ static void init_file_create(void)
     if (fs_open(&f, path, FS_O_READ) < 0) {
 		create_file(path);
 		open_file(&f, path);
-		write_and_close_file(&f, buf);
+		write_and_close_at(&f, buf, 0);
     }
 
 	fs_close(&f);
@@ -639,12 +646,16 @@ int main(void)
 						continue;
 					}
 					
-					if (fx_pos >= fx_len) {
-						file_state = 1;
-						uart_send_pc(fs_info_send, strlen(fs_info_send));
+					if (fx_len > fx_pos) {
+						if ((fx_pos + strlen(FS_REC_BUF)) == fx_len) {
+							write_and_close_at(&file, FS_REC_BUF, fx_pos);
+						}
+						else {
+							write_at(&file, FS_REC_BUF, fx_pos);							
+						}
+						fx_pos += strlen(FS_REC_BUF);
 					}
 
-					write_and_close_file(&file, FS_REC_BUF);
 					uint8_t msg[32];
 					snprintf(msg, sizeof(msg), "ACK_%db\n", strlen(FS_REC_BUF));
                     uart_send_pc(msg, strlen(msg));
