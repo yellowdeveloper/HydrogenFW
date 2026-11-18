@@ -183,6 +183,10 @@ void get_digital_count(const uint8_t *received_buff) {
 	      received_buff[2];           // Merge All Received Values Into One
 	dc = dc << 8;                     //        arithmatic shift
 	dc = dc >> 8;                     //   (change into signed decimal)
+
+                                      // Optional Change: bit shift for noise-cut
+    dc &= 0xFFFFFF00;                 // cut least significant 8 bits
+
     digital_count = dc;
 }
 
